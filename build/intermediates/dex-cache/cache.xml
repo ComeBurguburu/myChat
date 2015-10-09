@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\AndroidWorkspace\Tchat\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\classes-8c08fc5b7a231404e1a5f488cae8740157d17b93.jar" />
+    </item>
+    <item
+        jar="C:\AndroidWorkspace\Tchat\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-a7845cc7c9282c9b670edd0e5826a4f61ae9e28d.jar" />
+    </item>
+    <item
+        jar="C:\Sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-3ee79c7b8b77b158defac01839721e218d548b85.jar" />
+    </item>
+    <item
+        jar="C:\Users\côme\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.5.0\4de2b4ed3445c37ec1720a7d214712e845a24636\okhttp-2.5.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4de2b4ed3445c37ec1720a7d214712e845a24636">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\okhttp-2.5.0-b84f4bc4cda9691a8be47d45d369b7d4c0a347ca.jar" />
+    </item>
+    <item
+        jar="C:\Users\côme\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.6.0\98476622f10715998eacf9240d6b479f12c66143\okio-1.6.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\okio-1.6.0-a852e5267d6263c6dfb2e126840512c882a3505e.jar" />
+    </item>
+    <item
+        jar="C:\AndroidWorkspace\Tchat\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\classes-9e852902da6f11cf039f9c7765d49a6bf8c0fc8b.jar" />
+    </item>
+    <item
+        jar="C:\AndroidWorkspace\Tchat\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="C:\AndroidWorkspace\Tchat\app\build\intermediates\pre-dexed\debug\classes-f070534c8a816ce39494809536b7be539680602a.jar" />
+    </item>
+
+</items>
