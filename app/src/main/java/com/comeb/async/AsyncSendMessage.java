@@ -4,6 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.comeb.tchat.TchatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
@@ -48,9 +53,15 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
 
     @Override
     protected Void doInBackground(Void... arg0) {
-
+        JSONObject json = new JSONObject();
         try {
-            response = ServerAPI.getInstance().post(getURL());
+            json.put("login", TchatActivity.getLogin());
+            json.put("password", TchatActivity.getLogin());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            response = ServerAPI.getInstance().post(getURL(),json.toString());
         } catch (IOException e) {
             response="(void)";
             e.printStackTrace();

@@ -50,7 +50,7 @@ class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
     protected Void doInBackground(Void... arg0) {
 
         try {
-            response = ServerAPI.getInstance().post(getURL());
+            response = ServerAPI.getInstance().post(getURL(),"");
         } catch (IOException e) {
             response=null;
             e.printStackTrace();

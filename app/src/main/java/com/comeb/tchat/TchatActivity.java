@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.com.comeb.async.ServerAPI;
@@ -36,8 +35,8 @@ public class TchatActivity extends AppCompatActivity {
 
     private static DummyFragment []frag;
     private int counter=0;
-    private static String login;
-    private static String  password;
+    private static String login="test2";
+    private static String  password="test2";
 
     public static String getLogin() {
         return login;
@@ -77,9 +76,12 @@ public class TchatActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         ArrayList list = new ArrayList();
-        list.add(new ElemLeft(getLogin(),getPassword()));
+        list.add(new ElemLeft(getLogin(), getPassword()));
 
-        initialise_timer();
+     //   initialise_timer();
+        //ServerAPI.getInstance().testCredentialsString(TchatActivity.this,getLogin(),getPassword());
+       // ServerAPI.getInstance().testMessageString(TchatActivity.this,getLogin(),getPassword());
+        ServerAPI.getInstance().getAllMessage(getContext());
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -89,14 +91,11 @@ public class TchatActivity extends AppCompatActivity {
 
                 switch (tab.getPosition()) {
                     case 0:
-                        showToast("One");
                         break;
                     case 1:
-                        showToast("Two");
 
                         break;
                     case 2:
-                        showToast("Three");
 
                         break;
                 }
@@ -117,9 +116,6 @@ public class TchatActivity extends AppCompatActivity {
 
     }
 
-    void showToast(String msg) {
-       // Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
     public void initialise_timer() {
 
         final Handler handler = new Handler();
@@ -127,8 +123,8 @@ public class TchatActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //foobar();
-                Toast.makeText(TchatActivity.this,String.valueOf(counter++),Toast.LENGTH_SHORT).show();
-                ServerAPI.getInstance().getAllMessage2(getContext(), getLogin(), getPassword());
+               // Toast.makeText(TchatActivity.this, String.valueOf(counter++), Toast.LENGTH_SHORT).show();
+                ServerAPI.getInstance().getAllMessage(getContext());
                 handler.postDelayed(this, 10 * 1000);
 
             }
@@ -247,7 +243,7 @@ public class TchatActivity extends AppCompatActivity {
                         //list.add(new ElemRight("Titi", ed.getText().toString()));
                         ed.setText("");
                         //  arrayAdapter.notifyDataSetChanged();
-                        ServerAPI.getInstance().sendMessage(getContext(),getLogin(), getPassword(), message);
+                        ServerAPI.getInstance().sendMessage(getContext(), message);
                     }
                 }
             });
