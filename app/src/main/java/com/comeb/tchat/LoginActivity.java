@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEntered=(EditText)findViewById(R.id.Username_entrance);
         final EditText passwordEntered=(EditText)findViewById(R.id.Password_entrance);
+        final TextView error_message_pop_up = (TextView) findViewById(R.id.error_message);
         Button loginButton = (Button)findViewById(R.id.Login_button);
         Button createAccountButton = (Button)findViewById(R.id.create_account_button);
         if(!username.equals("")&&(!password.equals(""))){
@@ -107,8 +108,10 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 //list.add(new ElemRight("Titi", passwordEntered.getText().toString()));
+                error_message_pop_up.setText("Your username or your password isn't correct");
                 usernameEntered.setText("");
                 passwordEntered.setText("");
+
                 //arrayAdapter.notifyDataSetChanged();
                 //ServerAPI.getInstance().sendMessage(TchatActivity.this, "test", "test", message);
             }

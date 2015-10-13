@@ -1,4 +1,4 @@
-package com.comeb.tchat;
+package com.comeb.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Getting single contact
     Contact getContact(int id) {
+        
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,

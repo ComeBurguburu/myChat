@@ -1,4 +1,4 @@
-package com.comeb.tchat;
+package com.comeb.model;
 
 /**
  * Created by benjaminjornet on 13/10/15.
@@ -8,21 +8,20 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.comeb.tchat.R;
 
 /*
 public class AndroidSQLiteActivity extends Activity {

@@ -1,4 +1,4 @@
-package com.comeb.tchat;
+package com.comeb.adapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.comeb.tchat;
+package com.comeb.model;
 
 /**
  * Created by benjaminjornet on 13/10/15.
@@ -47,16 +47,6 @@ public class Contact {
     // setting name
     public void setName(String name){
         this._name = name;
-    }
-
-    // getting password
-    public String get_password() {
-        return _password;
-    }
-
-    // setting password
-    public void set_password(String _password) {
-        this._password = _password;
     }
 
     // getting phone number

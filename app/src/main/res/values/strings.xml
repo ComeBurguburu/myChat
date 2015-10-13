@@ -22,4 +22,14 @@
         completions."
     </string>
     <string name="title_activity_test">TestActivity</string>
+
+    <string name="login">Log in</string>
+    <string name="password">Password</string>
+    <string name="password_entrance">Enter your password</string>
+    <string name="username">Username</string>
+    <string name="username_entrance">Enter your username</string>
+    <string name="register">Register</string>
+    <string name="create_account">Create Account</string>
+    <string name="test">test</string>
+
 </resources>

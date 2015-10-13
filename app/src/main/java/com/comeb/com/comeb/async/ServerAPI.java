@@ -37,15 +37,15 @@ public class ServerAPI {
         StringBuffer sb = new StringBuffer();
         sb.append(url_root);
         sb.append(str1);
-        if (!str2.equals("")) {
+        if ((str2!=null)&&!str2.equals("")) {
             sb.append("/");
             sb.append(str2);
         }
-        if (!str3.equals("")) {
+        if ((str3!=null)&&!str3.equals("")) {
             sb.append("/");
             sb.append(str3);
         }
-        if (!str4.equals("")) {
+        if ((str4!=null)&&!str4.equals("")) {
             sb.append("/");
             sb.append(str4);
         }
