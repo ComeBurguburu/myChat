@@ -1,10 +1,11 @@
-package com.comeb.com.comeb.async;
+package com.comeb.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import java.io.IOException;
+
 
 class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 {

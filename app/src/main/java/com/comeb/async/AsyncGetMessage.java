@@ -1,4 +1,4 @@
-package com.comeb.com.comeb.async;
+package com.comeb.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,15 +6,12 @@ import android.os.AsyncTask;
 import com.comeb.model.Elem;
 import com.comeb.model.ElemSimple;
 import com.comeb.tchat.TchatActivity;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
@@ -144,11 +141,11 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         }
     return L;
     }
-    private ArrayList convertMessage_GSon(String response)  {
+   /* private ArrayList convertMessage_GSon(String response)  {
         Gson gson=new Gson();
         Type listType = new TypeToken<ArrayList<Elem>>(){}.getType();
         return gson.fromJson(response, listType);
-        }
+        }*/
 
 
 
