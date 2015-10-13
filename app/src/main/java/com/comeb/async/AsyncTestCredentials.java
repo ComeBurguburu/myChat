@@ -1,10 +1,11 @@
-package com.comeb.com.comeb.async;
+package com.comeb.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import java.io.IOException;
+
 
 class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 {
@@ -50,7 +51,7 @@ class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
     protected Void doInBackground(Void... arg0) {
 
         try {
-            response = ServerAPI.getInstance().post(getURL());
+            response = ServerAPI.getInstance().post(getURL(),"");
         } catch (IOException e) {
             response=null;
             e.printStackTrace();

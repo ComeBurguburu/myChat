@@ -1,5 +1,10 @@
 package com.comeb.model;
 
+import com.comeb.tchat.TchatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -54,5 +59,19 @@ public abstract class Elem {
 
     public String toString(){
         return message;
+    }
+    public static Elem fabrique(String json_object){
+        JSONObject j;
+        try {
+            j = new JSONObject(json_object);
+            if(j.getString("login").equals(TchatActivity.getLogin())){
+                return new ElemRight(j.getString("login"),j.getString("message"));
+            }else{
+                return new ElemLeft(j.getString("login"),j.getString("message"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
