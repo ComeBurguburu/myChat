@@ -2,6 +2,7 @@ package com.comeb.tchat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
-import com.comeb.com.comeb.async.ServerAPI;
+import com.comeb.async.ServerAPI;
 import com.comeb.model.Elem;
 import com.comeb.model.ElemLeft;
 
@@ -63,6 +64,10 @@ public class TchatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_animation);
+        SharedPreferences prefs = getSharedPreferences("users_credentials",MODE_PRIVATE);
+        setLogin(prefs.getString("login","void"));
+        setPassword(prefs.getString("password", "void"));
+        System.out.println("login: "+getLogin()+" password "+getPassword());
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 

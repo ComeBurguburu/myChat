@@ -8,6 +8,7 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.okhttp.RequestBody;
 
 import java.io.IOException;
 
@@ -77,8 +78,8 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
      */
 
 
-    public String getSendMessageURL(String message) {
-        return fullUrl("message", message);
+    public String getSendMessageURL() {
+        return fullUrl("messages");
     }
     public String getSendMessageFileURL(String message,String uuid,String filename){
         return fullUrl(message,uuid,filename);
@@ -88,42 +89,58 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         return fullUrl("messages");
     }
 
-    /* private boolean  testCredentials(String user,String password){
-         String s = testCredentialsString(user, password);
-         return (s!=null) && s.equals("true");
-     }*/
 
 
-    public void testCredentialsString(Context context, String user, String password) {
-        new AsyncTestCredentials(context, getURLCredentials()).execute();
+
+    public void testCredentials(Context context, String user, String password) {
+        new AsyncTestCredentials(context, getURLCredentials(),user,password).execute();
     }
-    public void testMessageString(Context context, String user, String password) {
-        new AsyncTestCredentials(context, getGetMessageURL()).execute();
-    }
+
 
     public void sendMessage(Context context, String message) {
-        new AsyncSendMessage(context, getSendMessageURL(message)).execute();
+        new AsyncSendMessage(context, getSendMessageURL(),message).execute();
     }
 
     public void getAllMessage(Context context) {
+        System.out.println("fetch all messages");
         new AsyncGetMessage(context, getGetMessageURL()).execute();
     }
 
 
     public String post(String url,String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
-
-        // RequestBody body = RequestBody.create(JSON, json.toString());
+        RequestBody body = RequestBody.create(JSON, json.toString());
         String credential = Credentials.basic(TchatActivity.getLogin(), TchatActivity.getPassword());
-
-
-
-        Request request = new Request.Builder()
+                Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .header("Authorization",credential)
-                .build();
-        Response response = client.newCall(request).execute();
+                .header("Authorization", credential);
+
+                if(json!=null && !json.equals("")) {
+                    requestBuilder.post(body);
+                }
+
+        Response response = client.newCall(requestBuilder.build()).execute();
         return response.body().string();
+    }
+
+    public String post_connect(String url, String login, String password) throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+        String credential = Credentials.basic(login,password);
+
+
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(url)
+                .header("Authorization", credential);
+
+
+        Response response = client.newCall(requestBuilder.build()).execute();
+        return response.body().string();
+    }
+
+    public String get(String url) throws IOException{
+        return post(url,"");
     }
 }
 

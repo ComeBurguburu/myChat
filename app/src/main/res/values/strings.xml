@@ -30,5 +30,8 @@
     <string name="username_entrance">Enter your username</string>
     <string name="register">Register</string>
     <string name="create_account">Create Account</string>
+    <string name="test">test</string>
+    <string name="connexion_error">connexion error</string>
+    <string name="is_incorrect" >is incorrect</string>
 
 </resources>

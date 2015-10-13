@@ -2,13 +2,38 @@ package com.comeb.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+
+import com.comeb.tchat.LoginActivity;
+import com.comeb.tchat.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 
-class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
+public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 {
+    private String login;
+    private String password;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     private Context context;
     private String URL;
     private String response;
@@ -29,10 +54,13 @@ class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 
     }
 
-    public AsyncTestCredentials(Context context, String URL) {
+    public AsyncTestCredentials(Context context, String URL, String user, String password) {
         super();
         setContext(context);
         setURL(URL);
+        setLogin(user);
+        setPassword(password);
+
     }
     @Override
     protected void onPreExecute() {
@@ -51,7 +79,7 @@ class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
     protected Void doInBackground(Void... arg0) {
 
         try {
-            response = ServerAPI.getInstance().post(getURL(),"");
+            response = ServerAPI.getInstance().post_connect(getURL(), login, password);
         } catch (IOException e) {
             response=null;
             e.printStackTrace();
@@ -61,8 +89,26 @@ class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 
     @Override
     protected void onPostExecute(Void result) {
+        System.out.println(response);
+        try {
+            JSONObject resp= new JSONObject(response);
+            if(resp.getInt("status")==200){
 
-        Toast.makeText(context, "Le traitement asynchrone est terminé:"+response, Toast.LENGTH_LONG).show();
+                LoginActivity.switchToTchat(context,getLogin(),getPassword());
+            }else {
+                JSONArray arr=resp.getJSONArray("elements");
+                LoginActivity.error(String.valueOf(arr.get(0))+context.getString(R.string.is_incorrect));
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        LoginActivity.error(context.getString(R.string.connexion_error));
+
+
+
+       // Toast.makeText(context, "Le traitement asynchrone est terminé:"+response, Toast.LENGTH_LONG).show();
     }
 
 

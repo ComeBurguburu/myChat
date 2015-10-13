@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
 {
     private Context context;
@@ -59,13 +60,13 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         JSONObject json = new JSONObject();
         try {
             json.put("login", TchatActivity.getLogin());
-            json.put("password", TchatActivity.getLogin());
+            json.put("password", TchatActivity.getPassword());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            response = ServerAPI.getInstance().post(getURL(),json.toString());
+            response = ServerAPI.getInstance().get(getURL());
         } catch (IOException e) {
             response="error";
             e.printStackTrace();
@@ -76,10 +77,10 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
     @Override
     protected void onPostExecute(Void result) {
 
-      //  Toast.makeText(context, "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
-       // TchatActivity.rebuildArray(convertMessage(response));
-        TchatActivity.getAdapter(0).setList(uniqUser(response));
-        TchatActivity.getAdapter(0).notifyDataSetChanged();
+        //  Toast.makeText(context, "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
+        // TchatActivity.rebuildArray(convertMessage(response));
+     //   TchatActivity.getAdapter(0).setList(uniqUser(response));
+     //   TchatActivity.getAdapter(0).notifyDataSetChanged();
         TchatActivity.getAdapter(1).setList(convertMessage(response));
         TchatActivity.getAdapter(1).notifyDataSetChanged();
         TchatActivity.getRecyclerView(0).scrollToPosition(TchatActivity.getAdapter(0).getItemCount());
@@ -111,6 +112,8 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
 
 
     private ArrayList convertMessage(String response){
+        System.out.println(response);
+
         ArrayList<Elem> L=new ArrayList<Elem>();
         StringBuffer sb=new StringBuffer();
         JSONObject jo= null;
@@ -121,7 +124,6 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
             e.printStackTrace();
         }
 
-        System.out.println(response);
         String json_string=sb.append("{list:").append(response).append("}").toString();
         JSONArray list;
         try {
@@ -133,13 +135,13 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         int index;
         for(index=0;index<list.length();index++){
             try {
-               String json_message = list.get(index).toString();
+                String json_message = list.get(index).toString();
                 L.add(Elem.fabrique(json_message));
 
             } catch (JSONException e) {
             }
         }
-    return L;
+        return L;
     }
    /* private ArrayList convertMessage_GSon(String response)  {
         Gson gson=new Gson();

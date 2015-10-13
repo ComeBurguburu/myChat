@@ -1,4 +1,4 @@
-package com.comeb.model;
+package com.comeb.database;
 
 import java.util.ArrayList;
 import java.util.List;

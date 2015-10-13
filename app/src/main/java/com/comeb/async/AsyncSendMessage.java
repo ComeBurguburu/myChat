@@ -16,6 +16,15 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
     private Context context;
     private String URL;
     private String response;
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getURL() {
         return URL;
@@ -33,10 +42,11 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
 
     }
 
-    public AsyncSendMessage(Context context,String URL) {
+    public AsyncSendMessage(Context context, String URL, String message) {
         super();
         setContext(context);
         setURL(URL);
+        setMessage(message);
     }
     @Override
     protected void onPreExecute() {
@@ -56,7 +66,8 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
         JSONObject json = new JSONObject();
         try {
             json.put("login", TchatActivity.getLogin());
-            json.put("password", TchatActivity.getLogin());
+            json.put("message",message);
+            json.put("uuid","cd670cb1-2675-43d3-9745-79b68134e4ad");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -71,7 +82,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
 
     @Override
     protected void onPostExecute(Void result) {
-
+        System.out.println(response);
         Toast.makeText(context, "Le traitement asynchrone est terminé:"+response.toString(), Toast.LENGTH_LONG).show();
     }
 

@@ -1,4 +1,4 @@
-package com.comeb.model;
+package com.comeb.database;
 
 /**
  * Created by benjaminjornet on 13/10/15.
