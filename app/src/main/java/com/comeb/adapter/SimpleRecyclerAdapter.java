@@ -8,18 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.comeb.model.Elem;
+import com.comeb.model.Message;
 import com.comeb.tchat.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.VersionViewHolder> {
-    List<Elem> versionModels;
-    private Elem currentItem;
+    List<Message> versionModels;
+    private Message currentItem;
 
 
-    public SimpleRecyclerAdapter(List<Elem> versionModels) {
+    public SimpleRecyclerAdapter(List<Message> versionModels) {
         this.versionModels = versionModels;
 
     }
@@ -53,12 +53,15 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
     }
 
     public void setList(ArrayList list) {
+        if(list==null){
+            return;
+        }
         versionModels.clear();
         versionModels.addAll(list);
     }
 
-    public List<Elem> getVersionModels() {
-        return versionModels== null ? new ArrayList<Elem>():versionModels;
+    public List<Message> getVersionModels() {
+        return versionModels== null ? new ArrayList<Message>():versionModels;
     }
 
 
@@ -110,7 +113,7 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
                 }
             });
 
-            //Elem item =(Elem)list.get(position);
+            //Message item =(Message)list.get(position);
 
             thumb_image_left = (ImageView) itemView.findViewById(R.id.image_left);
             thumb_image_right = (ImageView) itemView.findViewById(R.id.image_right);

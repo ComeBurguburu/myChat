@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.comeb.model.Elem;
+import com.comeb.model.Message;
 import com.comeb.tchat.R;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class MyAdapter extends BaseAdapter {
         TextView pseudo = (TextView)convertView.findViewById(R.id.pseudo);
         TextView message = (TextView)convertView.findViewById(R.id.message);
         TextView time = (TextView)convertView.findViewById(R.id.time);
-        Elem item =(Elem)list.get(position);
+        Message item =(Message)list.get(position);
 
         ImageView thumb_image_left = (ImageView) convertView.findViewById(R.id.image_left);
         ImageView thumb_image_right = (ImageView) convertView.findViewById(R.id.image_right);

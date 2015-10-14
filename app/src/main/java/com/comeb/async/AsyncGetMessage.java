@@ -3,8 +3,8 @@ package com.comeb.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.comeb.model.Elem;
-import com.comeb.model.ElemSimple;
+import com.comeb.model.Message;
+import com.comeb.model.MessageSimple;
 import com.comeb.tchat.TchatActivity;
 
 import org.json.JSONArray;
@@ -89,7 +89,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
     }
     @Deprecated
     private ArrayList uniqUser(String response){
-        ArrayList<ElemSimple>L=new ArrayList<>();
+        ArrayList<MessageSimple>L=new ArrayList<>();
         //"auteur1:message1;auteur2:message2; … auteurN:messageN";
         String []auteur_message=response.split(";");
         int i=0;
@@ -99,7 +99,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
             String []parts = information.split(":");
             if(parts.length==2) {
                 if(!parts[0].equals(TchatActivity.getLogin()) && !pseudo_uniq.contains(parts[0]) ){
-                    L.add(new ElemSimple(parts[0]));
+                    L.add(new MessageSimple(parts[0]));
                     pseudo_uniq.add(parts[0]);
                 }
             }
@@ -114,7 +114,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
     private ArrayList convertMessage(String response){
         System.out.println(response);
 
-        ArrayList<Elem> L=new ArrayList<Elem>();
+        ArrayList<Message> L=new ArrayList<Message>();
         StringBuffer sb=new StringBuffer();
         JSONObject jo= null;
         try {
@@ -136,7 +136,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         for(index=0;index<list.length();index++){
             try {
                 String json_message = list.get(index).toString();
-                L.add(Elem.fabrique(json_message));
+                L.add(Message.fabrique(json_message));
 
             } catch (JSONException e) {
             }
@@ -145,7 +145,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
     }
    /* private ArrayList convertMessage_GSon(String response)  {
         Gson gson=new Gson();
-        Type listType = new TypeToken<ArrayList<Elem>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<Message>>(){}.getType();
         return gson.fromJson(response, listType);
         }*/
 

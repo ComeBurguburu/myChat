@@ -26,8 +26,8 @@ import android.widget.ImageView;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.async.ServerAPI;
-import com.comeb.model.Elem;
-import com.comeb.model.ElemLeft;
+import com.comeb.model.Message;
+import com.comeb.model.MessageLeft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +36,8 @@ public class TchatActivity extends AppCompatActivity {
 
     private static DummyFragment []frag;
     private int counter=0;
-    private static String login="test2";
-    private static String  password="test2";
+    private static String login="";
+    private static String  password="";
 
     public static String getLogin() {
         return login;
@@ -67,7 +67,6 @@ public class TchatActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("users_credentials",MODE_PRIVATE);
         setLogin(prefs.getString("login","void"));
         setPassword(prefs.getString("password", "void"));
-        System.out.println("login: "+getLogin()+" password "+getPassword());
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 
@@ -81,7 +80,7 @@ public class TchatActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         ArrayList list = new ArrayList();
-        list.add(new ElemLeft(getLogin(), getPassword()));
+        list.add(new MessageLeft(getLogin(), getPassword()));
 
      //   initialise_timer();
         //ServerAPI.getInstance().testCredentialsString(TchatActivity.this,getLogin(),getPassword());
@@ -245,7 +244,7 @@ public class TchatActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     String message = ed.getText().toString();
                     if (!message.equals("")) {
-                        //list.add(new ElemRight("Titi", ed.getText().toString()));
+                        //list.add(new MessageRight("Titi", ed.getText().toString()));
                         ed.setText("");
                         //  arrayAdapter.notifyDataSetChanged();
                         ServerAPI.getInstance().sendMessage(getContext(), message);
@@ -260,7 +259,7 @@ public class TchatActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(linearLayoutManager);
           //  recyclerView.setHasFixedSize(true);
             if (adapter == null) {
-                adapter = new SimpleRecyclerAdapter(new ArrayList<Elem>());
+                adapter = new SimpleRecyclerAdapter(new ArrayList<Message>());
             }
             recyclerView.setAdapter(adapter);
             return view;
