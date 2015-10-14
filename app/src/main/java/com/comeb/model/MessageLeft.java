@@ -6,6 +6,10 @@ import com.comeb.tchat.R;
  * Created by côme on 24/09/2015.
  */
 public class MessageLeft extends Message {
+    public MessageLeft(int i,String p,String m){
+        super(i,p,m);
+        ResImg = R.mipmap.ic_user_blue;
+    }
     public MessageLeft(String p,String m){
         super(p,m);
         ResImg = R.mipmap.ic_user_blue;

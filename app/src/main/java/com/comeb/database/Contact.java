@@ -9,9 +9,7 @@ public class Contact {
     //private variables
     int _id;
     String _name;
-    String _password;
     String _phone_number;
-
     // Empty constructor
     public Contact() {
 

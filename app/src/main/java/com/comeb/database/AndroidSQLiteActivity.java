@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.comeb.model.Message;
 
 import com.comeb.tchat.R;
 
@@ -75,17 +76,18 @@ public class AndroidSQLiteActivity extends Activity {
          * */
         // Inserting Contacts
         Log.d("Insert: ", "Inserting ..");
-        db.addContact(new Contact("Come", "9100000000"));
-        db.addContact(new Contact("Benjamin", "9199999999"));
-        db.addContact(new Contact("Gerard", "9522222222"));
-        db.addContact(new Contact("Najat", "9533333333"));
+
+        //db.addMessage(Message.fabrique2("Come","udcubjc"));
+        //db.addMessage(new Message("Benjamin", "jbcjhebch"));
+        //db.addMessage(new Message("Gerard", "becjhce"));
+        //db.addMessage(new Message("Najat", "ne ckj c"));
 
         // Reading all contacts
-        Log.d("Reading: ", "Reading all contacts..");
-        List<Contact> contacts = db.getAllContacts();
+        Log.d("Reading: ", "Reading all messages..");
+        List<Message> messages = db.getAllMessages();
 
-        for (Contact cn : contacts) {
-            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,Phone: " + cn.getPhoneNumber();
+        for (Message mes : messages) {
+            String log =  "Name: " + mes.getPseudo() + " ,Message: " + mes.getMessage();
             // Writing Contacts to log
             Log.d("Name: ", log);
         }

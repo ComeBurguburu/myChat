@@ -10,12 +10,19 @@ import java.util.Date;
 /**
  * Created by côme on 24/09/2015.
  */
-public abstract class Message {
+public class Message {
     protected int ResImg;
+    protected int id;
     protected String pseudo;
     protected String message;
     protected Date time;
 
+    public Message(int i, String p,String m){
+        id = i;
+        pseudo=p;
+        message=m;
+        time=new Date();
+    }
     public Message(String p,String m){
         pseudo=p;
         message=m;
@@ -32,6 +39,14 @@ public abstract class Message {
     public void setTime(Date time) {
         this.time = time;
     }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public int getResImg() {
         return ResImg;
@@ -72,6 +87,14 @@ public abstract class Message {
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    public static Message fabrique2(int id, String login, String message){
+
+        if(login.equals(TchatActivity.getLogin())){
+            return new MessageRight(id,login,message);
+        }else{
+            return new MessageLeft(id,login,message);
         }
     }
 }
