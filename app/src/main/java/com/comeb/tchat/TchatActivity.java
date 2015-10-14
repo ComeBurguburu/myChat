@@ -266,23 +266,37 @@ public class TchatActivity extends AppCompatActivity {
     }
 
     public void testdb(){
-        DatabaseHandler dao = new DatabaseHandler(TchatActivity.this);
-        // Create a message
+        try {
+            int idValue;
+            Message messageGot = null;
+            DatabaseHandler dao = new DatabaseHandler(TchatActivity.this);
+            // Create a message
 
-        ArrayList<Message> mes = new ArrayList<>();
-        Message message = new Message(50,"Come","I am a test");
-        mes.add(message);
+            ArrayList<Message> mes = new ArrayList<>();
+            Message message = new Message("Come", "I am a test");
+            idValue = message.getId();
+            if (message != null) {
+                mes.add(message);
+            }
 
-        // Save it in the database
-        dao.addMessage(message);
-        // Get it from the database
-        Message messageGot = dao.getMessage(50);
+            // Save it in the database
+            dao.addMessage(message);
+            // Get it from the database
+            if (dao.getMessage(idValue) != null) {
+                messageGot = dao.getMessage(idValue);
+            }
 
-        getAdapter(1).setList(mes);
+            if (mes != null) {
+                getAdapter(1).setList(mes);
+            }
 
-        getAdapter(1).notifyDataSetChanged();
-        // Print it to check if everything is ok
-        Toast.makeText(TchatActivity.this, (CharSequence) messageGot,Toast.LENGTH_SHORT).show();
-
+            getAdapter(1).notifyDataSetChanged();
+            // Print it to check if everything is ok
+            if (messageGot != null) {
+                Toast.makeText(TchatActivity.this, (CharSequence) messageGot, Toast.LENGTH_SHORT).show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

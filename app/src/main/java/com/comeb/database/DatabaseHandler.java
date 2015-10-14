@@ -17,9 +17,8 @@ import com.comeb.model.Message;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
-    private static DatabaseHandler singleton = null;
-
     // Database Version
+    private static DatabaseHandler singleton;
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
