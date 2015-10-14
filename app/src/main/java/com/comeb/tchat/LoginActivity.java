@@ -1,104 +1,174 @@
 package com.comeb.tchat;
+/*
+        import java.io.IOException;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+        import org.apache.http.HttpResponse;
+        import org.apache.http.client.ClientProtocolException;
+        import org.apache.http.client.methods.HttpGet;
+        import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.comeb.async.ServerAPI;
+        import android.app.Activity;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.text.TextUtils;
+        import android.util.Log;
+        import android.view.View;
+        import android.view.View.OnClickListener;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.ProgressBar;
+        import android.widget.TextView;
+        import android.widget.Toast;
+*/
+public class LogInActivity { //extends Activity
+/*
+    public static final String SERVER = "192.168.1.20";
 
-/**
- * Created by benjaminjornet on 09/10/15.
- */
-public class LoginActivity extends AppCompatActivity {
+    private final String TAG = ParlezVousActivity.class.getSimpleName();
 
-    private static TextView error_message_pop_up;
-    private static EditText usernameEntered;
-    private static EditText passwordEntered;
+    private EditText usernameField;
+    private EditText passwordField;
+    private Button cleanButton;
+    private Button sendButton;
+    private ProgressBar loading;
+    private TextView errorMessage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        Log.i(TAG, "onCreate!");
+        setContentView(R.layout.activity_parlezvous);
+
+        usernameField = (EditText) findViewById(R.id.username_field);
+        passwordField = (EditText) findViewById(R.id.password_field);
+        cleanButton = (Button) findViewById(R.id.clean_button);
+        sendButton = (Button) findViewById(R.id.send_button);
+        loading = (ProgressBar) findViewById(R.id.loading);
+        errorMessage = (TextView) findViewById(R.id.error_message);
+
+        if (savedInstanceState != null && savedInstanceState.getBoolean("isErrorMessageVisible"))
+            errorMessage.setVisibility(View.VISIBLE);
+
+        cleanButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+        });
+
+        sendButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                if (hasEmptyFields()) {
+                    errorMessage.setVisibility(View.VISIBLE);
+                } else {
+                    String username = usernameField.getText().toString();
+                    String password = passwordField.getText().toString();
+                    new ParlezVousTask().execute(username, password);
+                }
+            }
+        });
+
         SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
+        usernameField.setText(prefs.getString("username", ""));
+        passwordField.setText(prefs.getString("password", ""));
 
+    }
 
-        final String username=prefs.getString("login", "");
-        String password=prefs.getString("password","");
+    private boolean hasEmptyFields() {
+        return TextUtils.isEmpty(usernameField.getText()) || TextUtils.isEmpty(passwordField.getText());
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause!");
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "onRestart!");
+    }
 
-        usernameEntered=(EditText)findViewById(R.id.Username_entrance);
-        passwordEntered=(EditText)findViewById(R.id.Password_entrance);
-        error_message_pop_up = (TextView) findViewById(R.id.error_message);
-        
-        Button loginButton = (Button)findViewById(R.id.Login_button);
-        Button createAccountButton = (Button)findViewById(R.id.create_account_button);
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i(TAG, "onRestoreInstanceState!");
+    }
 
-        if(!username.equals("")&&(!password.equals(""))){
-           switchToTchat(LoginActivity.this,username,password);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume!");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isErrorMessageVisible", errorMessage.getVisibility() == View.VISIBLE);
+        Log.i(TAG, "onSaveInstanceState!");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy!");
+    }
+
+    private class ParlezVousTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            loading.setVisibility(View.VISIBLE);
         }
 
-        // If we want to be connected
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        protected Boolean doInBackground(String... params) {
 
-            @Override
-            public void onClick(View view) {
-                String usernameToCheck = usernameEntered.getText().toString();
-                String passwordToCheck = passwordEntered.getText().toString();
-                ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
+            String username = params[0];
+            String password = params[1];
 
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet("http://" + SERVER + ":9000/connect/" + username + "/" + password);
 
-
-                //arrayAdapter.notifyDataSetChanged();
-                //ServerAPI.getInstance().sendMessage(TchatActivity.this, "test", "test", message);
+            String content = null;
+            try {
+                HttpResponse response = client.execute(httpGet);
+                content = InputStreamToString.convert(response.getEntity().getContent());
+                publishProgress(content);
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
 
-        // If we want to create an account
-        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            return Boolean.valueOf(content);
+        }
 
-            @Override
-            public void onClick(View view) {
-                String usernameToCheck = usernameEntered.getText().toString();
-                String passwordToCheck = passwordEntered.getText().toString();
-
-
-                /* TODO !!!!!!!!!!!!!!!!!
-                    Create a connexion with the database
-                 */
-
-
-                switchToTchat(LoginActivity.this,usernameToCheck,passwordToCheck);
-
-
+        @Override
+        protected void onPostExecute(Boolean result) {
+            loading.setVisibility(View.INVISIBLE);
+            String message;
+            if (result) {
+                message = "Utilisateur connect�!";
+                SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("username", usernameField.getText().toString());
+                editor.putString("password", passwordField.getText().toString());
+                editor.commit();
+                Intent intent = new Intent(ParlezVousActivity.this, ParlezVousActivity2.class);
+                // Without Preferences but with extras
+                // intent.putExtra("username", usernameField.getText().toString());
+                // intent.putExtra("password", passwordField.getText().toString());
+                startActivity(intent);
+            } else {
+                message = "Vous n'�tes pas connect�!";
             }
-        });
+            Toast.makeText(ParlezVousActivity.this, message, Toast.LENGTH_SHORT).show();
+        }
 
     }
-    public static void switchToTchat(Context context,String login,String password){
-        SharedPreferences prefs = context.getSharedPreferences("users_credentials", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putString("login", login);
-        editor.putString("password", password);
-        editor.commit();
-
-        Toast.makeText(context,"T'es connecté mon baba!",Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(context, TchatActivity.class);
-        context.startActivity(intent);
-    }
-
-    public static void error(String message) {
-        
-        error_message_pop_up.setText(message);
-        usernameEntered.setText("");
-        passwordEntered.setText("");
-    }
+*/
 }
