@@ -28,11 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
 
-
         final String username=prefs.getString("login", "");
         String password=prefs.getString("password","");
-
-
 
         usernameEntered=(EditText)findViewById(R.id.Username_entrance);
         passwordEntered=(EditText)findViewById(R.id.Password_entrance);
@@ -53,11 +50,6 @@ public class LoginActivity extends AppCompatActivity {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
                 ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
-
-
-
-                //arrayAdapter.notifyDataSetChanged();
-                //ServerAPI.getInstance().sendMessage(TchatActivity.this, "test", "test", message);
             }
         });
 
@@ -69,15 +61,10 @@ public class LoginActivity extends AppCompatActivity {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
 
-
                 /* TODO !!!!!!!!!!!!!!!!!
                     Create a connexion with the database
                  */
-
-
                 switchToTchat(LoginActivity.this,usernameToCheck,passwordToCheck);
-
-
             }
         });
 

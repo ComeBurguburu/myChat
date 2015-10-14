@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.comeb.model.MyCredentials;
 import com.comeb.tchat.TchatActivity;
 
 import org.json.JSONException;
@@ -65,7 +66,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
     protected Void doInBackground(Void... arg0) {
         JSONObject json = new JSONObject();
         try {
-            json.put("login", TchatActivity.getLogin());
+            json.put("login", MyCredentials.getLogin());
             json.put("message",message);
             json.put("uuid","cd670cb1-2675-43d3-9745-79b68134e4ad");
         } catch (JSONException e) {
@@ -85,7 +86,4 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void>
         System.out.println(response);
         Toast.makeText(context, "Le traitement asynchrone est terminé:"+response.toString(), Toast.LENGTH_LONG).show();
     }
-
-
-
 }

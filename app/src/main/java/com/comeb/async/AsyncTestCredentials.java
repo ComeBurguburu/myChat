@@ -105,12 +105,6 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
         }
 
         LoginActivity.error(context.getString(R.string.connexion_error));
-
-
-
        // Toast.makeText(context, "Le traitement asynchrone est terminé:"+response, Toast.LENGTH_LONG).show();
     }
-
-
-
 }

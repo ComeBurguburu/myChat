@@ -70,6 +70,4 @@ public class MyAdapter extends BaseAdapter {
         time.setText(item.getTime().toString());
         return convertView;
     }
-
-
 }

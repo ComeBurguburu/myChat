@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.comeb.model.Message;
 import com.comeb.model.MessageSimple;
+import com.comeb.model.MyCredentials;
 import com.comeb.tchat.TchatActivity;
 
 import org.json.JSONArray;
@@ -59,8 +60,8 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
     protected Void doInBackground(Void... arg0) {
         JSONObject json = new JSONObject();
         try {
-            json.put("login", TchatActivity.getLogin());
-            json.put("password", TchatActivity.getPassword());
+            json.put("login", MyCredentials.getLogin());
+            json.put("password", MyCredentials.getPassword());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,11 +82,15 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         // TchatActivity.rebuildArray(convertMessage(response));
      //   TchatActivity.getAdapter(0).setList(uniqUser(response));
      //   TchatActivity.getAdapter(0).notifyDataSetChanged();
+
+        /*
+        TODO by COME
+
         TchatActivity.getAdapter(1).setList(convertMessage(response));
         TchatActivity.getAdapter(1).notifyDataSetChanged();
         TchatActivity.getRecyclerView(0).scrollToPosition(TchatActivity.getAdapter(0).getItemCount());
         TchatActivity.getRecyclerView(1).scrollToPosition(TchatActivity.getAdapter(1).getItemCount());
-
+*/
     }
     @Deprecated
     private ArrayList uniqUser(String response){
@@ -98,16 +103,13 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
             String information = auteur_message[i];
             String []parts = information.split(":");
             if(parts.length==2) {
-                if(!parts[0].equals(TchatActivity.getLogin()) && !pseudo_uniq.contains(parts[0]) ){
+                if(!parts[0].equals(MyCredentials.getLogin()) && !pseudo_uniq.contains(parts[0]) ){
                     L.add(new MessageSimple(parts[0]));
                     pseudo_uniq.add(parts[0]);
                 }
             }
-
         }
         return L;
-
-
     }
 
 
@@ -148,7 +150,4 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void>
         Type listType = new TypeToken<ArrayList<Message>>(){}.getType();
         return gson.fromJson(response, listType);
         }*/
-
-
-
 }

@@ -1,7 +1,5 @@
 package com.comeb.model;
 
-import com.comeb.tchat.TchatActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,11 +21,13 @@ public class Message {
         message=m;
         time=new Date();
     }
+
     public Message(String p,String m){
         pseudo=p;
         message=m;
         time=new Date();
     }
+
     public boolean isLeft(){
         return  false;
     }
@@ -79,7 +79,7 @@ public class Message {
         JSONObject j;
         try {
             j = new JSONObject(json_object);
-            if(j.getString("login").equals(TchatActivity.getLogin())){
+            if(j.getString("login").equals(MyCredentials.getLogin())){
                 return new MessageRight(j.getString("login"),j.getString("message"));
             }else{
                 return new MessageLeft(j.getString("login"),j.getString("message"));
@@ -91,7 +91,7 @@ public class Message {
     }
     public static Message fabrique2(int id, String login, String message){
 
-        if(login.equals(TchatActivity.getLogin())){
+        if(login.equals(MyCredentials.getLogin())){
             return new MessageRight(id,login,message);
         }else{
             return new MessageLeft(id,login,message);

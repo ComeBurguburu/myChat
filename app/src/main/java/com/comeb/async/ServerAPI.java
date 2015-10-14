@@ -2,6 +2,7 @@ package com.comeb.async;
 
 import android.content.Context;
 
+import com.comeb.model.MyCredentials;
 import com.comeb.tchat.TchatActivity;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.MediaType;
@@ -55,8 +56,6 @@ public class ServerAPI {
         return sb.toString();
     }
 
-
-
     /*
         /connect/{user}/{password}
         Vérifie l'existence de la combinaison user/password et retourne la chaine de caractères true si elle existe, false sinon.
@@ -69,7 +68,6 @@ public class ServerAPI {
             /message/{user}/{password}/{message}
     Poster un message dont l'auteur est user. La combinaison user/password doit être valide pour que le message soit posté. Aucune valeur de retour n'est renvoyé par le serveur.
    */
-
 
     /*
     /messages/{user}/{password}
@@ -90,8 +88,6 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
     }
 
 
-
-
     public void testCredentials(Context context, String user, String password) {
         new AsyncTestCredentials(context, getURLCredentials(),user,password).execute();
     }
@@ -106,11 +102,10 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         new AsyncGetMessage(context, getGetMessageURL()).execute();
     }
 
-
     public String post(String url,String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json.toString());
-        String credential = Credentials.basic(TchatActivity.getLogin(), TchatActivity.getPassword());
+        String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
                 Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
                 .header("Authorization", credential);
@@ -128,8 +123,6 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         OkHttpClient client = new OkHttpClient();
         String credential = Credentials.basic(login,password);
 
-
-
         Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
                 .header("Authorization", credential);
@@ -143,4 +136,3 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         return post(url,"");
     }
 }
-

@@ -17,6 +17,8 @@ import com.comeb.model.Message;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
+    private static DatabaseHandler singleton = null;
+
     // Database Version
     private static final int DATABASE_VERSION = 1;
 
@@ -36,10 +38,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    public static DatabaseHandler getInstance(Context context) {
+        if (singleton == null) {
+            singleton = new DatabaseHandler(context);
+        }
+        return singleton;
+    }
+
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_MESSAGES + "("
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME + " TEXT,"
                 + KEY_MESSAGE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE); // TO CHANGE !!!!!!!!!
@@ -60,32 +69,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
 
     // Adding new message
-    void addMessage(Message message) {
+    public void addMessage(Message message) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, message.getPseudo()); // Contact Name
-        values.put(TABLE_MESSAGES, message.getMessage()); // Contact Phone
+        values.put(KEY_ID, message.getId()); // Message ID
+        values.put(KEY_NAME, message.getPseudo()); // Message Name
+        values.put(KEY_MESSAGE, message.getMessage()); // Message
 
         // Inserting Row
-        //db.insert(TABLE_MESSAGES, null, values);
+        String myQuery = "INSERT INTO " + TABLE_MESSAGES + " (" +
+                KEY_NAME + ", " + KEY_MESSAGE + ") VALUES (\"" +
+                message.getPseudo() + "\", \"" +
+                message.getMessage() + "\")";
+        db.execSQL(myQuery);
         db.close(); // Closing database connection
     }
 
     // Getting single message
-    Message getMessage(int id) {
+    public Message getMessage(int id) {
         
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MESSAGES + " WHERE " + KEY_ID + " = " + id, null);
 
-        Cursor cursor = db.query(TABLE_MESSAGES, new String[] { KEY_ID,
-                        KEY_NAME, KEY_MESSAGE }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
+        if (cursor.getCount() == 0){
+            cursor.close();
+            System.out.println("No result");
+            return null;
+        }
+        cursor.moveToNext();
 
-        Message message = new Message( cursor.getInt(0), cursor.getString(1), cursor.getString(2));
-        // return message
-        return message;
+
+        try {
+            System.out.println(cursor.getString(cursor.getColumnIndexOrThrow(KEY_MESSAGE)));
+        }catch(Exception e){
+            System.out.println("column  not found");
+        }
+        //Message message = new Message( cursor.getInt(Colo), cursor.getString(1), cursor.getString(2));
+        //return message;
+        return null;
     }
 
     // Getting All Contacts

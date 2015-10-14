@@ -2,67 +2,74 @@
 <items version="2" >
 
     <item
-        jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/classes-c820c691b303a081fef310d773b1b4b9904ea2af.jar" />
-    </item>
-    <item
-        jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="39ae02ce40c3ac828abbf780ce0ff5d7a28b7d6a">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/classes-147d9ba6e4db79e414552921b54f6c26bf8e5e9b.jar" />
-    </item>
-    <item
-        jar="/home/benjaminjornet/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.5.0/4de2b4ed3445c37ec1720a7d214712e845a24636/okhttp-2.5.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="4de2b4ed3445c37ec1720a7d214712e845a24636">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/okhttp-2.5.0-7d3fa10743a3fc145cf0dd6c42a948c267ede16d.jar" />
-    </item>
-    <item
         jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/classes-07b1aefefbe0bbf167ca9b54addc70e4176ba179.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-07b1aefefbe0bbf167ca9b54addc70e4176ba179.jar" />
     </item>
     <item
         jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/internal_impl-23.0.1-91a44621de167c3f709461f57ee9016a204154f5.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-91a44621de167c3f709461f57ee9016a204154f5.jar" />
+    </item>
+    <item
+        jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-c820c691b303a081fef310d773b1b4b9904ea2af.jar" />
+    </item>
+    <item
+        jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/im.dino/dbinspector/3.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9e8a08096cebc958def6e5392dbf0d6a1e64cea1">
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-7ea317fd54ce011bd33d4bd4f1652783e48d4ed6.jar" />
     </item>
     <item
         jar="/home/benjaminjornet/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/support-annotations-23.0.1-d2e83204170121f9538fde732afae2f78fdcfef4.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-d2e83204170121f9538fde732afae2f78fdcfef4.jar" />
     </item>
     <item
         jar="/home/benjaminjornet/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.6.0/98476622f10715998eacf9240d6b479f12c66143/okio-1.6.0.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="98476622f10715998eacf9240d6b479f12c66143">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/okio-1.6.0-7e394b34dd5f6ac6a2b2d6dd606be8ad67e03fcd.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/okio-1.6.0-7e394b34dd5f6ac6a2b2d6dd606be8ad67e03fcd.jar" />
+    </item>
+    <item
+        jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="39ae02ce40c3ac828abbf780ce0ff5d7a28b7d6a">
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-147d9ba6e4db79e414552921b54f6c26bf8e5e9b.jar" />
     </item>
     <item
         jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/classes-8fed533a7003cf993c2a89a952640df2f458a5b2.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-8fed533a7003cf993c2a89a952640df2f458a5b2.jar" />
     </item>
     <item
         jar="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
-        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/release/classes-4e9fc3f0078f783ef7dc06602d3d6faa90c74310.jar" />
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/classes-4e9fc3f0078f783ef7dc06602d3d6faa90c74310.jar" />
+    </item>
+    <item
+        jar="/home/benjaminjornet/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.5.0/4de2b4ed3445c37ec1720a7d214712e845a24636/okhttp-2.5.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4de2b4ed3445c37ec1720a7d214712e845a24636">
+        <dex dex="/home/benjaminjornet/Projet_MyChat_Android/myChat2/app/build/intermediates/pre-dexed/debug/okhttp-2.5.0-7d3fa10743a3fc145cf0dd6c42a948c267ede16d.jar" />
     </item>
 
 </items>

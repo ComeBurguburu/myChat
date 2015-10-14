@@ -23,9 +23,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.async.ServerAPI;
+import com.comeb.database.DatabaseHandler;
 import com.comeb.model.Message;
 import com.comeb.model.MessageLeft;
 
@@ -36,10 +38,10 @@ public class TchatActivity extends AppCompatActivity {
 
     private static DummyFragment []frag;
     private int counter=0;
-    private static String login="";
-    private static String  password="";
+    private  String login="";
+    private  String  password="";
 
-    public static String getLogin() {
+    public  String getLogin() {
         return login;
     }
 
@@ -47,7 +49,7 @@ public class TchatActivity extends AppCompatActivity {
         this.login = login;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -55,7 +57,7 @@ public class TchatActivity extends AppCompatActivity {
         this.password = password;
     }
 
-    public static SimpleRecyclerAdapter getAdapter(int frag_id) {
+    public SimpleRecyclerAdapter getAdapter(int frag_id) {
         return frag[frag_id].getAdapter();
     }
 
@@ -97,13 +99,10 @@ public class TchatActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-
                         break;
                     case 2:
-
                         break;
                 }
-
             }
 
             @Override
@@ -117,7 +116,7 @@ public class TchatActivity extends AppCompatActivity {
             }
         });
        Snackbar.make(findViewById(R.id.tabanim_maincontent), "Ready", Snackbar.LENGTH_SHORT).show();
-
+        testdb();
     }
 
     public void initialise_timer() {
@@ -264,5 +263,26 @@ public class TchatActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             return view;
         }
+    }
+
+    public void testdb(){
+        DatabaseHandler dao = new DatabaseHandler(TchatActivity.this);
+        // Create a message
+
+        ArrayList<Message> mes = new ArrayList<>();
+        Message message = new Message(50,"Come","I am a test");
+        mes.add(message);
+
+        // Save it in the database
+        dao.addMessage(message);
+        // Get it from the database
+        Message messageGot = dao.getMessage(50);
+
+        getAdapter(1).setList(mes);
+
+        getAdapter(1).notifyDataSetChanged();
+        // Print it to check if everything is ok
+        Toast.makeText(TchatActivity.this, (CharSequence) messageGot,Toast.LENGTH_SHORT).show();
+
     }
 }

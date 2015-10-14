@@ -18,7 +18,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
     List<Message> versionModels;
     private Message currentItem;
 
-
     public SimpleRecyclerAdapter(List<Message> versionModels) {
         this.versionModels = versionModels;
 
@@ -43,7 +42,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         }else{
             versionViewHolder.setImageRightResource(versionModels.get(i).getResImg());
         }
-
     }
 
     @Override
@@ -60,6 +58,13 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         versionModels.addAll(list);
     }
 
+    public void addList(Message m) {
+        if(m==null){
+            return;
+        }
+        versionModels.add(m);
+        this.notifyDataSetChanged();
+    }
     public List<Message> getVersionModels() {
         return versionModels== null ? new ArrayList<Message>():versionModels;
     }
@@ -98,8 +103,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
         }
 
 
-
-
         public VersionViewHolder(View itemView) {
             super(itemView);
 
@@ -117,13 +120,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
 
             thumb_image_left = (ImageView) itemView.findViewById(R.id.image_left);
             thumb_image_right = (ImageView) itemView.findViewById(R.id.image_right);
-
-
         }
-
-
     }
-
-
-
 }
