@@ -1,24 +1,37 @@
-package com.comeb.com.comeb.async;
+package com.comeb.async;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.ImageView;
 
-import com.comeb.tchat.TchatActivity;
+import com.comeb.model.Message;
+import com.comeb.model.MessageSimple;
+import com.comeb.model.MyCredentials;
+import com.comeb.tchat.SyncListener;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by côme on 07/10/2015.
  */
 public class ServerAPI {
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private final String url_root = "http://training.loicortola.com/chat-rest/2.0/";
+    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static ServerAPI singleton = null;
+    private static ArrayList<AsyncTask> asyncList;
 
     private ServerAPI() {
     }
@@ -26,26 +39,38 @@ public class ServerAPI {
     public static ServerAPI getInstance() {
         if (singleton == null) {
             singleton = new ServerAPI();
+            singleton.asyncList = new ArrayList<AsyncTask>();
         }
         return singleton;
     }
 
-    private String fullUrl(String route){
-        return fullUrl(route,"","");
+    public static void stopAllAsync(){
+        if(singleton==null){
+            return;
+        }
+        Iterator<AsyncTask> it = asyncList.iterator();
+        while(it.hasNext()){
+            it.next().cancel(true);
+        }
     }
+
+    private String fullUrl(String route) {
+        return fullUrl(route, "", "");
+    }
+
     private String fullUrl(String str1, String str2) {
-        return fullUrl(str1, str2,"");
+        return fullUrl(str1, str2, "");
     }
 
     private String fullUrl(String str1, String str2, String str3) {
         StringBuffer sb = new StringBuffer();
         sb.append(url_root);
         sb.append(str1);
-        if (str2!= null && !str2.equals("")) {
+        if (str2 != null && !str2.equals("")) {
             sb.append("/");
             sb.append(str2);
         }
-        if (str3!=null && !str3.equals("")) {
+        if (str3 != null && !str3.equals("")) {
             sb.append("/");
             sb.append(str3);
         }
@@ -53,7 +78,6 @@ public class ServerAPI {
         System.out.println(sb.toString());
         return sb.toString();
     }
-
 
 
     /*
@@ -77,53 +101,156 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
      */
 
 
-    public String getSendMessageURL(String message) {
-        return fullUrl("message", message);
-    }
-    public String getSendMessageFileURL(String message,String uuid,String filename){
-        return fullUrl(message,uuid,filename);
-    }
-
-    public String getGetMessageURL() {
+    private String getSendMessageURL() {
         return fullUrl("messages");
     }
 
-    /* private boolean  testCredentials(String user,String password){
-         String s = testCredentialsString(user, password);
-         return (s!=null) && s.equals("true");
-     }*/
+    private String getSendMessageFileURL(String message, String uuid, String filename) {
+        return fullUrl(message, uuid, filename);
+    }
+
+    private String getGetMessageURL() {
+        return fullUrl("messages");
+    }
 
 
-    public void testCredentialsString(Context context, String user, String password) {
-        new AsyncTestCredentials(context, getURLCredentials()).execute();
+   public void testCredentials(Context context, String user, String password) {
+        asyncList.add(new AsyncTestCredentials(context, getURLCredentials(), user, password).execute());
     }
-    public void testMessageString(Context context, String user, String password) {
-        new AsyncTestCredentials(context, getGetMessageURL()).execute();
-    }
+
 
     public void sendMessage(Context context, String message) {
-        new AsyncSendMessage(context, getSendMessageURL(message)).execute();
+       sendMessage(context, message, null);
     }
 
-    public void getAllMessage(Context context) {
-        new AsyncGetMessage(context, getGetMessageURL()).execute();
+    public void sendMessage(Context context, String message,ArrayList<String> base64) {
+        asyncList.add(new AsyncSendMessage(context, getSendMessageURL(), message, base64).execute());
+    }
+
+    public void getAllMessage(SyncListener syncListener) {
+        asyncList.add(new AsyncGetMessage(syncListener, getGetMessageURL()).execute());
+    }
+
+    public void getImage(ImageView image,String URL,Context context){
+        //Picasso.with(context).load(Uri.parse(URL)).into(image_show);
+        asyncList.add(new AsyncLoadImage(image, URL, context).execute());
+        System.out.println("Load: " + URL);
     }
 
 
-    public String post(String url,String json) throws IOException {
+  /*  public String post(String url, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
-
-        // RequestBody body = RequestBody.create(JSON, json.toString());
-        String credential = Credentials.basic(TchatActivity.getLogin(), TchatActivity.getPassword());
-
-
-
-        Request request = new Request.Builder()
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
+        Request.Builder requestBuilder = new Request.Builder()
                 .url(url)
-                .header("Authorization",credential)
-                .build();
-        Response response = client.newCall(request).execute();
+                .header("Authorization", credential);
+
+        if (json != null && !json.equals("")) {
+            requestBuilder.post(body);
+        }
+
+        Response response = client.newCall(requestBuilder.build()).execute();
         return response.body().string();
+    }*/
+    public Response post(String url, String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(url)
+                .header("Authorization", credential);
+
+        if (json != null && !json.equals("")) {
+            requestBuilder.post(body);
+        }
+
+        Response response = client.newCall(requestBuilder.build()).execute();
+        return response;
+    }
+    public InputStream fetch_stream(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
+
+        Request request = new Request.Builder().url(url).header("Authorization", credential).build();
+
+        Response response = client.newCall(request).execute();
+        return response.body().byteStream();
+    }
+
+    public String post_connect(String url, String login, String password) throws IOException {
+
+        OkHttpClient client = new OkHttpClient();
+        String credential = Credentials.basic(login, password);
+
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(url)
+                .header("Authorization", credential);
+
+
+        Response response = client.newCall(requestBuilder.build()).execute();
+        return response.body().string();
+    }
+
+    public Response get(String url) throws IOException {
+        return post(url, "");
+    }
+    public static ArrayList<Message> uniqUser(ArrayList<Message> messages) {
+        if(messages==null){
+            return null;
+        }
+
+        int index;
+        ArrayList L=new ArrayList<MessageSimple>();
+        for (index = 0; index < messages.size(); index++) {
+            MessageSimple pseudo = new MessageSimple(messages.get(index).getPseudo());
+            if (!L.contains(pseudo)) {
+                L.add(pseudo);
+            }
+
+        }
+        return L;
+
+    }
+
+
+    public static ArrayList convertMessage(Response response) {
+        String message= null;
+        if(response==null){
+            return null;
+        }
+
+        try {
+            message = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Message> L = new ArrayList<Message>();
+        if(!response.message().equals("OK")){
+           return null;
+
+        }else {
+
+            JSONArray list;
+            try {
+                list = new JSONArray(message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+            int index;
+            for (index = 0; index < list.length(); index++) {
+                try {
+                    String json_message = list.get(index).toString();
+                    L.add(Message.fabrique(json_message));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return L;
     }
 }
 

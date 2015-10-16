@@ -1,57 +1,41 @@
 package com.comeb.tchat;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
-import com.comeb.com.comeb.async.ServerAPI;
-import com.comeb.model.Elem;
-import com.comeb.model.ElemLeft;
+import com.comeb.async.ServerAPI;
+import com.comeb.database.DatabaseHandler;
+import com.comeb.model.Message;
+import com.comeb.model.MyCredentials;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
-public class TchatActivity extends AppCompatActivity {
+public class TchatActivity extends AppCompatActivity implements SyncListener {
 
-    private static DummyFragment []frag;
-    private int counter=0;
-    private static String login="test2";
-    private static String  password="test2";
+    private static DummyFragment[] frag;
 
-    public static String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public DummyFragment getFragment(int index) {
+        return index < frag.length ? frag[index] : null;
     }
 
     public static SimpleRecyclerAdapter getAdapter(int frag_id) {
@@ -61,13 +45,19 @@ public class TchatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_animation);
+        SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
+        MyCredentials.setLogin(prefs.getString("login", "void"));
+        MyCredentials.setPassword(prefs.getString("password", "void"));
+
+        Context context = this;
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.tabanim_viewpager);
         setupViewPager(viewPager);
@@ -75,13 +65,7 @@ public class TchatActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabanim_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        ArrayList list = new ArrayList();
-        list.add(new ElemLeft(getLogin(), getPassword()));
-
-     //   initialise_timer();
-        //ServerAPI.getInstance().testCredentialsString(TchatActivity.this,getLogin(),getPassword());
-       // ServerAPI.getInstance().testMessageString(TchatActivity.this,getLogin(),getPassword());
-        ServerAPI.getInstance().getAllMessage(getContext());
+        initialise_timer();
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -112,25 +96,27 @@ public class TchatActivity extends AppCompatActivity {
 
             }
         });
-       Snackbar.make(findViewById(R.id.tabanim_maincontent), "Ready", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.tabanim_maincontent), "Ready", Snackbar.LENGTH_SHORT).show();
 
     }
 
     public void initialise_timer() {
-
+        //get all messages each 10 seconds;
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                //foobar();
-               // Toast.makeText(TchatActivity.this, String.valueOf(counter++), Toast.LENGTH_SHORT).show();
-                ServerAPI.getInstance().getAllMessage(getContext());
+                doRefresh();
                 handler.postDelayed(this, 10 * 1000);
-
             }
         };
         handler.postDelayed(runnable, 0);
 
+    }
+
+    private void doRefresh() {
+        // Toast.makeText(TchatActivity.this, String.valueOf(counter++), Toast.LENGTH_SHORT).show();
+        ServerAPI.getInstance().getAllMessage(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -158,107 +144,82 @@ public class TchatActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_switch:
-
+                Intent intent = new Intent(TchatActivity.this, com.comeb.tchat.ListActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public Context getContext() {
+    /*public Context getContext() {
         return TchatActivity.this;
-    }
+    }*/
 
     public static RecyclerView getRecyclerView(int i) {
-       return frag[i].getRecyclerView();
+        return frag[i].getRecyclerView();
 
     }
 
+    @Override
+    public void onSuccess(ArrayList<Message> messages) {
+        getAdapter(0).setList(ServerAPI.uniqUser(messages));
+        getAdapter(0).notifyDataSetChanged();
+        getAdapter(1).setList(messages);
+        getAdapter(1).notifyDataSetChanged();
+        getRecyclerView(0).scrollToPosition(TchatActivity.getAdapter(0).getItemCount());
+        getRecyclerView(1).scrollToPosition(TchatActivity.getAdapter(1).getItemCount());
+        DatabaseHandler dao=DatabaseHandler.getInstance(this);
+        dao.addMessages(messages);
+    }
 
-    static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    @Override
+    public void onFailure() {
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int RESULT_LOAD_IMAGE = 1;
 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
+        ArrayList<String> encoded = new ArrayList<String>();
 
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
+        System.out.println("Request code:" + requestCode);
+        System.out.println("result code:" + resultCode);
+        System.out.println("is data" + (null != data));
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            System.out.println("bien reçu");
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            // while (cursor.moveToNext()) {
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            ImageView imageView = (ImageView) frag[1].getView().findViewById(R.id.preview);
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            imageView.setImageBitmap(bitmap);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+            encoded.add(Base64.encodeToString(byteArray, Base64.DEFAULT));
+            // }
+            cursor.close();
+            setEncoded(encoded, 1);
         }
     }
 
-    public static class DummyFragment extends Fragment {
-        int color;
-        private SimpleRecyclerAdapter adapter;
-        private RecyclerView recyclerView;
-
-        public RecyclerView getRecyclerView(){
-            return recyclerView;
-        }
-
-        public DummyFragment() {
-        }
-
-        public SimpleRecyclerAdapter getAdapter() {
-            return this.adapter;
-        }
-
-        @SuppressLint("ValidFragment")
-        public DummyFragment(int color) {
-            this.color = color;
-
-        }
-
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.dummy_fragment, container, false);
-
-            final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.dummyfrag_bg);
-            frameLayout.setBackgroundColor(color);
-            final EditText ed = (EditText) view.findViewById(R.id.edit);
-            ImageView v = (ImageView) view.findViewById(R.id.send);
-            v.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    String message = ed.getText().toString();
-                    if (!message.equals("")) {
-                        //list.add(new ElemRight("Titi", ed.getText().toString()));
-                        ed.setText("");
-                        //  arrayAdapter.notifyDataSetChanged();
-                        ServerAPI.getInstance().sendMessage(getContext(), message);
-                    }
-                }
-            });
-            recyclerView = (RecyclerView) view.findViewById(R.id.dummyfrag_scrollableview);
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
-            linearLayoutManager.setStackFromEnd(true);
-            linearLayoutManager.setSmoothScrollbarEnabled(true);
-            recyclerView.setLayoutManager(linearLayoutManager);
-          //  recyclerView.setHasFixedSize(true);
-            if (adapter == null) {
-                adapter = new SimpleRecyclerAdapter(new ArrayList<Elem>());
-            }
-            recyclerView.setAdapter(adapter);
-            return view;
-        }
+    private void setEncoded(ArrayList<String> encoded, int i) {
+        getFragment(i).setEncoded(encoded);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServerAPI.stopAllAsync();
+    }
+
 }
