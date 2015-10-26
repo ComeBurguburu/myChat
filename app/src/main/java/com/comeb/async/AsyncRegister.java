@@ -3,6 +3,8 @@ package com.comeb.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.comeb.tchat.SyncListener;
+import com.comeb.tchat.SyncListener2;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
@@ -13,13 +15,30 @@ import java.io.IOException;
 
 public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
 
-
     private String login;
     private String password;
     private Context context;
+    private SyncListener2 context2;
     private String URL;
     private Response response;
     private String answer;
+
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getURL() {
         return URL;
@@ -70,7 +89,6 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
         }
         return null;
     }
-
     @Override
     protected void onPostExecute(Void result) {
 
@@ -82,11 +100,12 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
 
         if(response.code()==200){
             //TODO
+            context2.onSuccess(getLogin(), getPassword());
         }else{
             //TODO
+            String errorMessage = String.valueOf(response.code());
+            context2.onFailure(errorMessage);
         }
 
     }
-
-
 }

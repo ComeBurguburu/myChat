@@ -17,7 +17,7 @@ import com.comeb.async.ServerAPI;
 /**
  * Created by benjaminjornet on 09/10/15.
  */
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity implements SyncListener2{
 
     private static TextView error_message_pop_up;
     private static EditText usernameEntered;
@@ -100,6 +100,16 @@ public class LoginActivity extends AppCompatActivity{
         error_message_pop_up.setText(message);
         usernameEntered.setText("");
         passwordEntered.setText("");
+    }
+
+    public void onSuccess(String username, String password){
+        // call the method switchToChat
+        switchToTchat(LoginActivity.this, username, password);
+    }
+
+    public void onFailure(String errorMessage){
+        //Just a toast to notify the user
+        Toast.makeText(LoginActivity.this,"Connexion failed " + errorMessage,Toast.LENGTH_SHORT).show();
     }
 
 }
