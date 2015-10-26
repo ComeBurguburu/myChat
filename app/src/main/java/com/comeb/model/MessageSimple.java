@@ -5,7 +5,7 @@ package com.comeb.model;
  */
 public class MessageSimple extends MessageRight{
     public MessageSimple(String pseudo){
-        super(0,pseudo,"");
+        super(pseudo,"");
         this.time=null;
     }
 }

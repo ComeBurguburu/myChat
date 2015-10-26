@@ -1,14 +1,16 @@
 package com.comeb.database;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.comeb.model.Message;
+import com.comeb.model.MessageLeft;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by benjaminjornet on 13/10/15.
@@ -84,14 +86,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(myQuery);
         db.close(); // Closing database connection
     }
+    public void addMessages(ArrayList<Message> messages){
+        if(messages==null || messages.isEmpty()){
+            return;
+        }
+        Iterator<Message> it = messages.iterator();
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.delete(TABLE_MESSAGES,null,null);
+        while(it.hasNext()){
+            addMessage(it.next());
+        }
+    }
 
     // Getting single message
     public Message getMessage(int id) {
-        
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MESSAGES + " WHERE " + KEY_ID + " = " + id, null);
 
-        if (cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
             cursor.close();
             System.out.println("No result");
             return null;
@@ -101,7 +114,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         try {
             System.out.println(cursor.getString(cursor.getColumnIndexOrThrow(KEY_MESSAGE)));
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("column  not found");
         }
         //Message message = new Message( cursor.getInt(Colo), cursor.getString(1), cursor.getString(2));
@@ -110,8 +123,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting All Contacts
-    public List<Message> getAllMessages() {
-        List<Message> messageList = new ArrayList<Message>();
+    public ArrayList<Message> getAllMessages() {
+        ArrayList<Message> messageList = new ArrayList<Message>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_MESSAGES;
 
@@ -119,17 +132,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Message message = new Message(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
-//                message.setPseudo(cursor.getString(0));
-//                message.setMessage(cursor.getString(1));
-                // Adding message to list
-                messageList.add(message);
-            } while (cursor.moveToNext());
+        while (cursor.moveToNext()) {
+            Message message = new MessageLeft(cursor.getInt(0), cursor.getString(1), cursor.getString(2), "");
+            // Adding message to list
+            messageList.add(message);
         }
 
-        // return message list
+
         return messageList;
     }
 
@@ -143,14 +152,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // updating row
         return db.update(TABLE_MESSAGES, values, KEY_ID + " = ?",
-                new String[]{ String.valueOf(message.getId()) });
+                new String[]{String.valueOf(message.getId())});
     }
 
     // Deleting single message
     public void deleteMessage(Message message) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_MESSAGES, KEY_ID + " = ?",
-                new String[] { String.valueOf(message.getId()) });
+                new String[]{String.valueOf(message.getId())});
         db.close();
     }
 

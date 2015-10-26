@@ -7,4 +7,11 @@
         android:id="@+id/action_switch"
         android:title="Switch"
         app:showAsAction="ifRoom" />
-</menu>
+
+    <item
+        android:id="@+id/disconnect"
+        android:title="Disconnect"
+        android:icon="@drawable/glyphicons_power"
+        app:showAsAction="ifRoom"/>
+
+    </menu>

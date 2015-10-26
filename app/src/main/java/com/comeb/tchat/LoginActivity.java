@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
+
+        setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
 
         final String username=prefs.getString("login", "");
@@ -34,12 +40,12 @@ public class LoginActivity extends AppCompatActivity {
         usernameEntered=(EditText)findViewById(R.id.Username_entrance);
         passwordEntered=(EditText)findViewById(R.id.Password_entrance);
         error_message_pop_up = (TextView) findViewById(R.id.error_message);
-
+        
         Button loginButton = (Button)findViewById(R.id.Login_button);
         Button createAccountButton = (Button)findViewById(R.id.create_account_button);
 
         if(!username.equals("")&&(!password.equals(""))){
-            switchToTchat(LoginActivity.this,username,password);
+           switchToTchat(LoginActivity.this,username,password);
         }
 
         // If we want to be connected
@@ -50,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
                 ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
+
+                //arrayAdapter.notifyDataSetChanged();
+                //ServerAPI.getInstance().sendMessage(TchatActivity.this, "test", "test", message);
             }
         });
 
@@ -61,10 +70,14 @@ public class LoginActivity extends AppCompatActivity {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
 
+                //TODO
                 /* TODO !!!!!!!!!!!!!!!!!
                     Create a connexion with the database
                  */
+
                 switchToTchat(LoginActivity.this,usernameToCheck,passwordToCheck);
+
+
             }
         });
 
@@ -83,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public static void error(String message) {
-
+        
         error_message_pop_up.setText(message);
         usernameEntered.setText("");
         passwordEntered.setText("");

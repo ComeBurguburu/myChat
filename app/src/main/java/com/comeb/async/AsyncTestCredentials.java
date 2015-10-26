@@ -13,8 +13,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 
-public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
-{
+public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
     private String login;
     private String password;
 
@@ -46,11 +45,11 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
         this.URL = URL;
     }
 
-    private void setContext(Context c){
+    private void setContext(Context c) {
         context = c;
     }
 
-    private AsyncTestCredentials(){
+    private AsyncTestCredentials() {
 
     }
 
@@ -62,6 +61,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
         setPassword(password);
 
     }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -69,7 +69,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values){
+    protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
         // Mise à jour de la ProgressBar
         //mProgressBar.setProgress(values[0]);
@@ -81,7 +81,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
         try {
             response = ServerAPI.getInstance().post_connect(getURL(), login, password);
         } catch (IOException e) {
-            response=null;
+            response = null;
             e.printStackTrace();
         }
         return null;
@@ -89,15 +89,14 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
 
     @Override
     protected void onPostExecute(Void result) {
-        System.out.println(response);
         try {
-            JSONObject resp= new JSONObject(response);
-            if(resp.getInt("status")==200){
+            JSONObject resp = new JSONObject(response);
+            if (resp.getInt("status") == 200) {
 
-                LoginActivity.switchToTchat(context,getLogin(),getPassword());
-            }else {
-                JSONArray arr=resp.getJSONArray("elements");
-                LoginActivity.error(String.valueOf(arr.get(0))+context.getString(R.string.is_incorrect));
+                LoginActivity.switchToTchat(context, getLogin(), getPassword());
+            } else {
+                JSONArray arr = resp.getJSONArray("elements");
+                LoginActivity.error(String.valueOf(arr.get(0)) + context.getString(R.string.is_incorrect));
 
             }
         } catch (JSONException e) {
@@ -105,6 +104,10 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void>
         }
 
         LoginActivity.error(context.getString(R.string.connexion_error));
-       // Toast.makeText(context, "Le traitement asynchrone est terminé:"+response, Toast.LENGTH_LONG).show();
+
+
+        // Toast.makeText(context, "Le traitement asynchrone est terminé:"+response, Toast.LENGTH_LONG).show();
     }
+
+
 }

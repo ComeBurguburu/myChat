@@ -67,7 +67,9 @@ public class MyAdapter extends BaseAdapter {
 
         pseudo.setText(item.getPseudo());
         message.setText(item.getMessage());
-        time.setText(item.getTime().toString());
+        time.setText(item.getTime()!=null?item.getTime().toString():"");
         return convertView;
     }
+
+
 }
