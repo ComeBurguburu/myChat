@@ -17,11 +17,10 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -30,7 +29,6 @@ import java.util.Iterator;
  */
 public class ServerAPI {
     private final String url_root = "http://training.loicortola.com/chat-rest/2.0/";
-    private final String url_connect = "http://formation-android-esaip.herokuapp.com/connect/";
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static ServerAPI singleton = null;
@@ -82,55 +80,20 @@ public class ServerAPI {
         return sb.toString();
     }
 
-    private String fullUrlConnect(String route) {
-        return fullUrl(route, "", "");
-    }
 
-    private String fullUrlConnect(String str1, String str2) {
-        return fullUrl(str1, str2, "");
-    }
 
-    private String fullUrlConnect(String str1, String str2, String str3) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(url_connect);
-        sb.append(str1);
-        if (str2 != null && !str2.equals("")) {
-            sb.append("/");
-            sb.append(str2);
-        }
-        if (str3 != null && !str3.equals("")) {
-            sb.append("/");
-            sb.append(str3);
-        }
 
-        System.out.println(sb.toString());
-        return sb.toString();
-    }
 
     /*
         /connect/{user}/{password}
         Vérifie l'existence de la combinaison user/password et retourne la chaine de caractères true si elle existe, false sinon.
     */
-    private boolean checkConnexion (String username, String pwd){
-
-        String url_tmp = "";
-        if((!username.equals("")) && (!pwd.equals("")) && (!username.contentEquals("--")) && (!pwd.contentEquals("--"))){
-            url_tmp = fullUrlConnect(username, pwd);
-        }
-
-        try{
-            URL myUrl = new URL(url_tmp);
-            URLConnection connection = myUrl.openConnection();
-            connection.setConnectTimeout(15000);
-            connection.connect();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     private String getURLCredentials() {
         return fullUrl("connect");
+    }
+    private String getURLRegister(String login,String passsword){
+        return fullUrl("register",login,passsword);
     }
 
     /*
@@ -161,6 +124,9 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
 
    public void testCredentials(Context context, String user, String password) {
         asyncList.add(new AsyncTestCredentials(context, getURLCredentials(), user, password).execute());
+    }
+    public void register(Context context, String user, String password) {
+        asyncList.add(new AsyncRegister(context, getURLRegister(user, password),user,password).execute());
     }
 
 
@@ -222,7 +188,27 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         Response response = client.newCall(request).execute();
         return response.body().byteStream();
     }
+    public Response post_register(String url, String login, String password) throws IOException {
 
+        OkHttpClient client = new OkHttpClient();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("login", login);
+            json.put("password", password);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(JSON, json.toString());
+
+
+        Request.Builder requestBuilder = new Request.Builder()
+                .url(url)
+                .post(body);
+
+
+        Response response = client.newCall(requestBuilder.build()).execute();
+        return response;
+    }
     public String post_connect(String url, String login, String password) throws IOException {
 
         OkHttpClient client = new OkHttpClient();

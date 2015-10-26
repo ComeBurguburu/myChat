@@ -79,11 +79,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_MESSAGE, message.getMessage()); // Message
 
         // Inserting Row
-        String myQuery = "INSERT INTO " + TABLE_MESSAGES + " (" +
+        db.insert(TABLE_MESSAGES,null,values);
+      /*  String myQuery = "INSERT INTO " + TABLE_MESSAGES + " (" +
                 KEY_NAME + ", " + KEY_MESSAGE + ") VALUES (\"" +
                 message.getPseudo() + "\", \"" +
                 message.getMessage() + "\")";
-        db.execSQL(myQuery);
+        db.execSQL(myQuery);*/
         db.close(); // Closing database connection
     }
     public void addMessages(ArrayList<Message> messages){
