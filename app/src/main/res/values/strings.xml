@@ -18,9 +18,6 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
     <string name="title_activity_test">TestActivity</string>
 
     <string name="login">Log in</string>
@@ -32,8 +29,7 @@
     <string name="create_account">Create Account</string>
     <string name="test">test</string>
     <string name="connexion_error">connexion error</string>
-    <string name="is_incorrect" >is incorrect</string>
+    <string name="is_incorrect"> %s is incorrect</string>
     <string name="title_activity_list">ListActivity</string>
-    <string name="title_activity_image" >imageActivity</string>
-
+    <string name="no_connexion">no internet connexion</string>
 </resources>

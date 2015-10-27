@@ -1,6 +1,5 @@
 package com.comeb.async;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.comeb.model.MyCredentials;
@@ -18,15 +17,11 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
     private String URL;
     protected Response response;
     private ArrayList messages;
-    private Context context;
 
     public String getURL() {
         return URL;
     }
 
-    private AsyncGetMessage() {
-
-    }
 
     public AsyncGetMessage(SyncListener syncListener, String URL) {
         super();
@@ -47,10 +42,6 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
         //mProgressBar.setProgress(values[0]);
     }
 
-    public Context getContext() {
-        return context;
-    }
-
     @Override
     protected Void doInBackground(Void... arg0) {
         JSONObject json = new JSONObject();
@@ -67,7 +58,6 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
             messages = ServerAPI.convertMessage(response);
 
         } catch (IOException e) {
-            ;
             e.printStackTrace();
         }
         return null;

@@ -2,7 +2,6 @@ package com.comeb.tchat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +11,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.async.ServerAPI;
@@ -38,6 +35,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     private static DummyFragment[] frag;
 
     public DummyFragment getFragment(int index) {
+
         return index < frag.length ? frag[index] : null;
     }
 
@@ -51,13 +49,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_animation);
-        SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
-        MyCredentials.setLogin(prefs.getString("login", "void"));
-        MyCredentials.setPassword(prefs.getString("password", "void"));
-       // Button disconnectButton = (Button)findViewById(R.id.disconnect);
-
-
-        Context context = this;
+        MyCredentials.setContext(TchatActivity.this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 
@@ -70,15 +62,8 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabanim_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        initialise_timer();
-/*
-        disconnectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+       initialise_timer();
 
-            }
-        });
-*/
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -127,19 +112,19 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     }
 
     private void doRefresh() {
-        // Toast.makeText(TchatActivity.this, String.valueOf(counter++), Toast.LENGTH_SHORT).show();
         ServerAPI.getInstance().getAllMessage(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        Context context=TchatActivity.this;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         frag = new DummyFragment[3];
-        frag[0] = new DummyFragment(getResources().getColor(R.color.accent_material_light));
-        frag[1] = new DummyFragment(getResources().getColor(R.color.ripple_material_light));
-        frag[2] = new DummyFragment(getResources().getColor(R.color.button_material_dark));
+        frag[0] = new DummyFragment(ContextCompat.getColor(context,R.color.accent_material_light));
+        frag[1] = new TchatFragment(ContextCompat.getColor(context,R.color.ripple_material_light));
+        frag[2] = new DummyFragment(ContextCompat.getColor(context,R.color.button_material_dark));
         adapter.addFrag(frag[0], "CONTACTS");
         adapter.addFrag(frag[1], "MESSAGE");
-        adapter.addFrag(frag[2], "NOTES");
+        adapter.addFrag(frag[2], "ABOUT");
         viewPager.setAdapter(adapter);
     }
 
@@ -160,22 +145,19 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
                 startActivity(intent);
                 return true;
             case R.id.disconnect:
-                finish();
-                //Intent intent_disconnect = new Intent(TchatActivity.this, com.comeb.tchat.LoginActivity.class);
-                //Toast.makeText(TchatActivity.this, "Disconnect called", Toast.LENGTH_LONG).show();
-                //startActivity(intent_disconnect);
-                //com.comeb.tchat.LoginActivity.switchToTchat(TchatActivity.this, "", "");
+                logout();
                 return true;
-                //case ou je rajoute mdp et id R.id ...
-            //mettre a vide les 2 login et pwd
-            // intend a faire ou je reviens sur la page login
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /*public Context getContext() {
-        return TchatActivity.this;
-    }*/
+    private void logout() {
+        MyCredentials.setLogin("");
+        MyCredentials.setPassword("");
+
+        finish();
+    }
+
 
     public static RecyclerView getRecyclerView(int i) {
         return frag[i].getRecyclerView();
@@ -188,8 +170,8 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         getAdapter(0).notifyDataSetChanged();
         getAdapter(1).setList(messages);
         getAdapter(1).notifyDataSetChanged();
-        getRecyclerView(0).scrollToPosition(TchatActivity.getAdapter(0).getItemCount());
-        getRecyclerView(1).scrollToPosition(TchatActivity.getAdapter(1).getItemCount());
+        getRecyclerView(0).scrollToPosition(getAdapter(0).getItemCount());
+        getRecyclerView(1).scrollToPosition(getAdapter(1).getItemCount());
         DatabaseHandler dao=DatabaseHandler.getInstance(this);
         dao.addMessages(messages);
     }
@@ -206,12 +188,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
 
         ArrayList<String> encoded = new ArrayList<String>();
 
-        System.out.println("Request code:" + requestCode);
-        System.out.println("result code:" + resultCode);
-        System.out.println("is data" + (null != data));
-
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            System.out.println("bien reçu");
 
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};

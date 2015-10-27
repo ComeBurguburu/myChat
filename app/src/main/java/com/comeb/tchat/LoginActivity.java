@@ -2,7 +2,6 @@ package com.comeb.tchat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.comeb.async.ServerAPI;
+import com.comeb.model.MyCredentials;
 
 /**
  * Created by benjaminjornet on 09/10/15.
@@ -27,15 +26,17 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        MyCredentials.setContext(this);
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        SharedPreferences prefs = getSharedPreferences("users_credentials", MODE_PRIVATE);
 
-        final String username=prefs.getString("login", "");
-        String password=prefs.getString("password","");
+        String username=MyCredentials.getLogin();
+        String password=MyCredentials.getPassword();
 
         usernameEntered=(EditText)findViewById(R.id.Username_entrance);
         passwordEntered=(EditText)findViewById(R.id.Password_entrance);
@@ -44,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2{
         Button loginButton = (Button)findViewById(R.id.Login_button);
         Button createAccountButton = (Button)findViewById(R.id.create_account_button);
 
-        if(!username.equals("")&&(!password.equals(""))){
+        if(MyCredentials.isSomeOneLogged()){
            switchToTchat(LoginActivity.this,username,password);
         }
 
@@ -56,9 +57,6 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2{
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
                 ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
-
-                //arrayAdapter.notifyDataSetChanged();
-                //ServerAPI.getInstance().sendMessage(TchatActivity.this, "test", "test", message);
             }
         });
 
@@ -69,38 +67,35 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2{
             public void onClick(View view) {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
-
-                //TODO
-                /* TODO !!!!!!!!!!!!!!!!!
-                    Create a connexion with the database
-                 */
-
-                switchToTchat(LoginActivity.this,usernameToCheck,passwordToCheck);
-
-
+                registerUser(LoginActivity.this,usernameToCheck,passwordToCheck);
             }
         });
 
     }
-    public static void switchToTchat(Context context,String login,String password){
-        SharedPreferences prefs = context.getSharedPreferences("users_credentials", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString("login", login);
-        editor.putString("password", password);
-        editor.commit();
+    private void registerUser(SyncListener2 context,String user,String password) {
+        ServerAPI.getInstance().register(context, user, password);
+    }
+    public void switchToTchat(Context context,String login,String password){
 
-        Toast.makeText(context,"T'es connecté mon baba!",Toast.LENGTH_SHORT).show();
+       MyCredentials.setLogin(login);
+       MyCredentials.setPassword(password);
+
         Intent intent = new Intent(context, TchatActivity.class);
         context.startActivity(intent);
     }
 
-    public static void error(String message) {
-        
+    public void error(String message,boolean userWrong,boolean passwordWrong) {
         error_message_pop_up.setText(message);
-        usernameEntered.setText("");
-        passwordEntered.setText("");
+        if(userWrong) {
+            usernameEntered.setText("");
+        }
+        if(passwordWrong) {
+            passwordEntered.setText("");
+        }
     }
+
+
 
     public void onSuccess(String username, String password){
         // call the method switchToChat
@@ -108,8 +103,7 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2{
     }
 
     public void onFailure(String errorMessage){
-        //Just a toast to notify the user
-        Toast.makeText(LoginActivity.this,"Connexion failed " + errorMessage,Toast.LENGTH_SHORT).show();
+       error(errorMessage,false,false);
     }
 
 }

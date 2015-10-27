@@ -8,6 +8,7 @@ import com.comeb.model.Message;
 import com.comeb.model.MessageSimple;
 import com.comeb.model.MyCredentials;
 import com.comeb.tchat.SyncListener;
+import com.comeb.tchat.SyncListener2;
 import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -92,8 +93,8 @@ public class ServerAPI {
     private String getURLCredentials() {
         return fullUrl("connect");
     }
-    private String getURLRegister(String login,String passsword){
-        return fullUrl("register",login,passsword);
+    private String getURLRegister(){
+        return fullUrl("register");
     }
 
     /*
@@ -122,11 +123,11 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
     }
 
 
-   public void testCredentials(Context context, String user, String password) {
+   public void testCredentials(SyncListener2 context, String user, String password) {
         asyncList.add(new AsyncTestCredentials(context, getURLCredentials(), user, password).execute());
     }
-    public void register(Context context, String user, String password) {
-        asyncList.add(new AsyncRegister(context, getURLRegister(user, password),user,password).execute());
+    public void register(SyncListener2 context, String user, String password) {
+        asyncList.add(new AsyncRegister(context, getURLRegister(),user,password).execute());
     }
 
 

@@ -3,7 +3,7 @@ package com.comeb.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.comeb.tchat.SyncListener;
+import com.comeb.tchat.R;
 import com.comeb.tchat.SyncListener2;
 import com.squareup.okhttp.Response;
 
@@ -15,10 +15,10 @@ import java.io.IOException;
 
 public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
 
+    private SyncListener2 sync;
     private String login;
     private String password;
     private Context context;
-    private SyncListener2 context2;
     private String URL;
     private Response response;
     private String answer;
@@ -44,21 +44,14 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
         return URL;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    private void setContext(Context c) {
-        context = c;
-    }
-
     private AsyncRegister() {
 
     }
 
-    public AsyncRegister(Context context, String URL,String login,String password) {
+    public AsyncRegister(SyncListener2 sync, String URL,String login,String password) {
         super();
-        this.context=context;
+        this.context=(Context)sync;
+        this.sync =sync;
         this.URL=URL;
         this.login=login;
         this.password=password;
@@ -92,19 +85,22 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPostExecute(Void result) {
 
-        try {
-            JSONObject resp=new JSONObject(answer);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (response == null) {
+            sync.error(context.getString(R.string.no_connexion), true, true);
+            return;
         }
 
-        if(response.code()==200){
-            //TODO
-            context2.onSuccess(getLogin(), getPassword());
-        }else{
-            //TODO
-            String errorMessage = String.valueOf(response.code());
-            context2.onFailure(errorMessage);
+        try {
+            JSONObject resp = new JSONObject(answer);
+            if (resp.getInt("status") == 200) {
+                sync.switchToTchat(context, getLogin(), getPassword());
+            } else {
+                String message = resp.getString("message");
+                sync.onFailure(message);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            sync.onFailure(context.getString(R.string.no_connexion));
         }
 
     }

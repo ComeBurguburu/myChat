@@ -32,11 +32,6 @@
             android:theme="@style/AppTheme"
             android:parentActivityName=".TchatActivity">
         </activity>
-        <activity
-            android:name=".ImageGalleryDemoActivity"
-            android:label="@string/title_activity_image"
-            android:theme="@style/AppTheme" >
-        </activity>
     </application>
 
 </manifest>

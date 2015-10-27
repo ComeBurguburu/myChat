@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.comeb.model.MyCredentials;
-import com.comeb.tchat.SyncListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,10 +16,8 @@ import java.io.InputStream;
 
 
 class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
-   protected SyncListener syncListener;
     private String URL;
     protected String response;
-    private Context context;
     private Bitmap bmp;
     private ImageView image_view;
 
@@ -32,18 +29,9 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
         this.URL = URL;
     }
 
-    private void setContext(Context c) {
-        context = c;
-    }
-
-    private AsyncLoadImage() {
-
-    }
-
     public AsyncLoadImage(ImageView v, String URL,Context context) {
         super();
-        setContext(context);
-        setURL(URL);
+        this.URL=URL;
         this.image_view=v;
     }
 

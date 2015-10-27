@@ -47,18 +47,6 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
         return URL;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    private void setContext(Context c) {
-        context = c;
-    }
-
-    private AsyncSendMessage() {
-
-    }
-
     public AsyncSendMessage(Context context, String URL, String message, ArrayList<String> base64) {
         super();
         this.context = context;
