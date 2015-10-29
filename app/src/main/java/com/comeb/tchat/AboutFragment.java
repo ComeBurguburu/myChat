@@ -2,6 +2,7 @@ package com.comeb.tchat;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +47,14 @@ public class AboutFragment extends DummyFragment {
 
         final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.dummyfrag_bg);
         frameLayout.setBackgroundColor(color);
-
+        
         recyclerView = (RecyclerView) view.findViewById(R.id.dummyfrag_scrollableview);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //  recyclerView.setHasFixedSize(true);
         if (adapter == null) {
 
             adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(),getContext());
@@ -56,6 +62,10 @@ public class AboutFragment extends DummyFragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+
+    public void setEncoded(ArrayList<String> encoded) {
     }
 }
 

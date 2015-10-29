@@ -2,8 +2,8 @@ package com.comeb.tchat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,12 +49,12 @@ public class TchatFragment extends DummyFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dummy_fragment, container, false);
+        View view = inflater.inflate(R.layout.tchat_fragment, container, false);
 
         final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.dummyfrag_bg);
         frameLayout.setBackgroundColor(color);
         final EditText ed = (EditText) view.findViewById(R.id.edit);
-        final ImageView preview=(ImageView)view.findViewById(R.id.preview);
+        final ImageView preview = (ImageView) view.findViewById(R.id.preview);
         final ImageView send = (ImageView) view.findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
 
@@ -69,8 +69,8 @@ public class TchatFragment extends DummyFragment {
             }
         });
 
-        ImageView v2 = (ImageView) view.findViewById(R.id.add);
-        v2.setOnClickListener(new View.OnClickListener() {
+        ImageView addImageButton = (ImageView) view.findViewById(R.id.add);
+        addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addImage();
@@ -85,10 +85,10 @@ public class TchatFragment extends DummyFragment {
         //  recyclerView.setHasFixedSize(true);
         if (adapter == null) {
 
-            adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(),getContext());
+            adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(), getContext());
         }
         recyclerView.setAdapter(adapter);
-        DatabaseHandler dao=DatabaseHandler.getInstance(getContext());
+        DatabaseHandler dao = DatabaseHandler.getInstance(getContext());
 
         getAdapter().setList(dao.getAllMessages());
         getAdapter().notifyDataSetChanged();
@@ -96,14 +96,27 @@ public class TchatFragment extends DummyFragment {
         return view;
     }
 
-    private void addImage() {
-        int RESULT_LOAD_IMAGE=1;
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        getActivity().startActivityForResult(i, RESULT_LOAD_IMAGE);
+    protected void addImage() {
+        int RESULT_LOAD_IMAGE = 1;
+
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            getActivity().startActivityForResult(intent, RESULT_LOAD_IMAGE);
+        } else {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            getActivity().startActivityForResult(intent, RESULT_LOAD_IMAGE);
+        }
+
     }
 
     public void setEncoded(ArrayList<String> encoded) {
         this.encoded = encoded;
     }
+
 }
 

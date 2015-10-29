@@ -10,9 +10,7 @@
         android:id="@+id/image_left"
         android:layout_width="50dip"
         android:layout_height="50dip"
-        android:src="@mipmap/ic_launcher"
-       />
-
+        android:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:layout_width="262dp"

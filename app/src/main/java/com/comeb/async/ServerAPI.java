@@ -77,7 +77,6 @@ public class ServerAPI {
             sb.append(str3);
         }
 
-        System.out.println(sb.toString());
         return sb.toString();
     }
 

@@ -65,9 +65,11 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        syncListener.onSuccess(messages);
-        //  Toast.makeText(context, "Le traitement asynchrone est terminé", Toast.LENGTH_LONG).show();
-        //
+        if (response == null) {
+            syncListener.onFailure();
+        } else {
+            syncListener.onSuccess(messages);
+        }
     }
 
    /* private ArrayList convertMessage_GSon(String response)  {

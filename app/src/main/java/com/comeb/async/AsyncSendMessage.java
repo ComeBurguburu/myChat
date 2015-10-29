@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.comeb.model.MyCredentials;
+import com.comeb.tchat.R;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
@@ -93,6 +94,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         try {
             response = ServerAPI.getInstance().post(getURL(), json.toString());
             answer = response.body().string();
@@ -106,7 +108,9 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        Toast.makeText(context, answer, Toast.LENGTH_LONG).show();
+        if (response == null || response.code() != 200) {
+            Toast.makeText(context, context.getString(R.string.no_connexion), Toast.LENGTH_LONG).show();
+        }
     }
 
 

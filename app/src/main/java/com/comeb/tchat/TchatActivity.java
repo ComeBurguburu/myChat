@@ -2,13 +2,11 @@ package com.comeb.tchat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +18,7 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.async.ServerAPI;
@@ -28,6 +27,9 @@ import com.comeb.model.Message;
 import com.comeb.model.MyCredentials;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class TchatActivity extends AppCompatActivity implements SyncListener {
@@ -62,7 +64,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabanim_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-       initialise_timer();
+        initialise_timer();
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -72,6 +74,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
 
                 switch (tab.getPosition()) {
                     case 0:
+
                         break;
                     case 1:
 
@@ -93,7 +96,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
 
             }
         });
-        Snackbar.make(findViewById(R.id.tabanim_maincontent), "Ready", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.tabanim_maincontent), getString(R.string.connected_as, MyCredentials.getLogin()), Snackbar.LENGTH_SHORT).show();
 
     }
 
@@ -116,14 +119,14 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Context context=TchatActivity.this;
+        Context context = TchatActivity.this;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         frag = new DummyFragment[3];
-        frag[0] = new DummyFragment(ContextCompat.getColor(context,R.color.accent_material_light));
-        frag[1] = new TchatFragment(ContextCompat.getColor(context,R.color.ripple_material_light));
-        frag[2] = new DummyFragment(ContextCompat.getColor(context,R.color.button_material_dark));
+        frag[0] = new DummyFragment(ContextCompat.getColor(context, R.color.accent_material_light));
+        frag[1] = new TchatFragment(ContextCompat.getColor(context, R.color.ripple_material_light));
+        frag[2] = new AboutFragment(ContextCompat.getColor(context, R.color.button_material_dark));
         adapter.addFrag(frag[0], "CONTACTS");
-        adapter.addFrag(frag[1], "MESSAGE");
+        adapter.addFrag(frag[1], "MESSAGES");
         adapter.addFrag(frag[2], "ABOUT");
         viewPager.setAdapter(adapter);
     }
@@ -139,10 +142,6 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.action_switch:
-                Intent intent = new Intent(TchatActivity.this, com.comeb.tchat.ListActivity.class);
-                startActivity(intent);
                 return true;
             case R.id.disconnect:
                 logout();
@@ -172,42 +171,60 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         getAdapter(1).notifyDataSetChanged();
         getRecyclerView(0).scrollToPosition(getAdapter(0).getItemCount());
         getRecyclerView(1).scrollToPosition(getAdapter(1).getItemCount());
-        DatabaseHandler dao=DatabaseHandler.getInstance(this);
+        DatabaseHandler dao = DatabaseHandler.getInstance(this);
         dao.addMessages(messages);
     }
 
     @Override
     public void onFailure() {
+        Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         int RESULT_LOAD_IMAGE = 1;
-
         ArrayList<String> encoded = new ArrayList<String>();
 
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-
             Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+          /*  String[] filePathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
             // while (cursor.moveToNext()) {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
+            */
             ImageView imageView = (ImageView) frag[1].getView().findViewById(R.id.preview);
-            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            imageView.setImageBitmap(bitmap);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            InputStream is = null;
 
-            encoded.add(Base64.encodeToString(byteArray, Base64.DEFAULT));
-            // }
-            cursor.close();
-            setEncoded(encoded, 1);
+            try {
+                is = getContentResolver().openInputStream(selectedImage);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                is.close();
+
+
+                //  Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                imageView.setImageBitmap(bitmap);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+                encoded.add(Base64.encodeToString(byteArray, Base64.DEFAULT));
+                // }
+                //   cursor.close();
+                setEncoded(encoded, 1);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
