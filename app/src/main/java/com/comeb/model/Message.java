@@ -3,8 +3,6 @@ package com.comeb.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-
 /**
  * Created by côme on 24/09/2015.
  */
@@ -13,7 +11,6 @@ public abstract class Message {
     protected int id;
     protected String pseudo;
     protected String message;
-    protected Date time;
     protected String uuid;
     protected String img;
 
@@ -25,11 +22,10 @@ public abstract class Message {
         this.id = id;
     }
 
-    public Message(int id,String login, String message, String uuid) {
-        this.id=id;
+    public Message(int id, String login, String message, String uuid) {
+        this.id = id;
         this.pseudo = login.trim();
         this.message = message.trim();
-        this.time = new Date();
         this.uuid = uuid;
     }
 
@@ -54,10 +50,9 @@ public abstract class Message {
     }
 
     public Message(String login, String message, String uuid) {
-        this.id=0;
+        this.id = 0;
         this.pseudo = login;
         this.message = message;
-        this.time = new Date();
         this.uuid = uuid;
     }
 
@@ -72,19 +67,10 @@ public abstract class Message {
     public Message(String p, String m) {
         pseudo = p;
         message = m;
-        time = new Date();
     }
 
     public boolean isLeft() {
         return false;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public int getResImg() {
@@ -137,6 +123,14 @@ public abstract class Message {
         }
     }
 
+    public static Message fabrique(int id, String login, String message, String uuid) {
+        if (login.equals(MyCredentials.getLogin())) {
+            return new MessageRight(id, login, message, uuid);
+        } else {
+            return new MessageLeft(id, login, message, uuid);
+        }
+    }
+
     public static Message fabrique(String json_object) {
         JSONObject j;
         try {
@@ -154,6 +148,10 @@ public abstract class Message {
 
     public boolean hasImg() {
         return img != null;
+    }
+
+    public String getInfo() {
+        return "login: " + getPseudo() + "\nmessage: " + getMessage() + "\nUUID:" + getUuid() + "\nimg: " + hasImg();
     }
 
 }

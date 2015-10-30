@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.comeb.model.Message;
-import com.comeb.model.MessageLeft;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,16 +17,19 @@ import java.util.Iterator;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+
     // All Static variables
     // Database Version
     private static DatabaseHandler singleton;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "messagesManager";
 
     // Contacts table name
     private static final String TABLE_MESSAGES = "messages";
+
+    private static final String KEY_IMG = "img";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
@@ -51,18 +53,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME + " TEXT,"
-                + KEY_MESSAGE + " TEXT" + ")";
-        db.execSQL(CREATE_CONTACTS_TABLE); // TO CHANGE !!!!!!!!!
-    }
-
-    // Upgrading database
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
-
-        // Create tables again
-        onCreate(db);
+                + KEY_MESSAGE + " TEXT, " + KEY_IMG + " TEXT" +
+                ")";
+        db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
     /**
@@ -74,12 +67,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-       // values.put(KEY_ID, message.getId()); // Message ID
+        // values.put(KEY_ID, message.getId()); // Message ID
         values.put(KEY_NAME, message.getPseudo()); // Message Name
         values.put(KEY_MESSAGE, message.getMessage()); // Message
 
         // Inserting Row
-        db.insert(TABLE_MESSAGES,null,values);
+        db.insert(TABLE_MESSAGES, null, values);
       /*  String myQuery = "INSERT INTO " + TABLE_MESSAGES + " (" +
                 KEY_NAME + ", " + KEY_MESSAGE + ") VALUES (\"" +
                 message.getPseudo() + "\", \"" +
@@ -87,14 +80,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(myQuery);*/
         db.close(); // Closing database connection
     }
-    public void addMessages(ArrayList<Message> messages){
-        if(messages==null || messages.isEmpty()){
+
+    public void addMessages(ArrayList<Message> messages) {
+        if (messages == null || messages.isEmpty()) {
             return;
         }
         Iterator<Message> it = messages.iterator();
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.delete(TABLE_MESSAGES,null,null);
-        while(it.hasNext()){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_MESSAGES, null, null);
+        while (it.hasNext()) {
             addMessage(it.next());
         }
     }
@@ -123,18 +117,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    // Getting All Contacts
+    // Getting All Messages
     public ArrayList<Message> getAllMessages() {
         ArrayList<Message> messageList = new ArrayList<Message>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_MESSAGES;
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.query(TABLE_MESSAGES, null, null, null, null, null, null, null);
 
         // looping through all rows and adding to list
         while (cursor.moveToNext()) {
-            Message message = new MessageLeft(cursor.getInt(0), cursor.getString(1), cursor.getString(2), "");
+            Message message = Message.fabrique(cursor.getInt(0), cursor.getString(1), cursor.getString(2), "");
             // Adding message to list
             messageList.add(message);
         }
@@ -176,4 +170,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_MESSAGES + " ADD COLUMN img TEXT");
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.comeb.async;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,6 +10,7 @@ import com.comeb.model.MyCredentials;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,11 +25,7 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
         return URL;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-
-    public AsyncLoadImage(ImageView v, String URL,Context context) {
+    public AsyncLoadImage(ImageView v, String URL) {
         super();
         this.URL=URL;
         this.image_view=v;
@@ -61,8 +57,6 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
         try {
             InputStream input = ServerAPI.getInstance().fetch_stream(getURL());
             bmp = BitmapFactory.decodeStream(input);
-
-
         } catch (IOException e) {
             response = "error";
             e.printStackTrace();
@@ -76,6 +70,11 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
         image_view.setImageBitmap(bmp);
 
     }
+
+    public InputStream toInputSteam(String s)  {
+        return new ByteArrayInputStream(s.getBytes());
+    }
+
 
    /* private ArrayList convertMessage_GSon(String response)  {
         Gson gson=new Gson();

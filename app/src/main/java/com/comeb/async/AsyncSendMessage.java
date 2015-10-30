@@ -32,16 +32,8 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
         return base64_list != null && !base64_list.isEmpty();
     }
 
-    public void setBase64(ArrayList<String> base64) {
-        this.base64_list = base64;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getURL() {
@@ -60,7 +52,6 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Toast.makeText(context, "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
     }
 
     @Override

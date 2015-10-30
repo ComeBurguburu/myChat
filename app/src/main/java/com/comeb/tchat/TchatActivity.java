@@ -181,11 +181,6 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         int RESULT_LOAD_IMAGE = 1;
@@ -236,6 +231,9 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     protected void onDestroy() {
         super.onDestroy();
         ServerAPI.stopAllAsync();
+    }
+    @Override
+    public void onBackPressed() {
     }
 
 }

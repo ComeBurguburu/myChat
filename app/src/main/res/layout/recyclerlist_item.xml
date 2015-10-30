@@ -10,7 +10,8 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp">
+    android:layout_marginBottom="5dp"
+    android:elevation="10dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
@@ -53,23 +54,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
                 android:textColor="#343434"
-                android:textSize="10dip"
+                android:textSize="15dip"
                 android:layout_marginTop="1dip"
                 android:layout_toRightOf="@+id/thumbnail"
                 android:text="@string/message" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/title"
-                android:gravity="right"
-                android:text="5:45"
-                android:layout_marginRight="5dip"
-                android:textSize="10dip"
-                android:textColor="#10bcc9"
-                android:textStyle="bold"/>
         </LinearLayout>
 
         <ImageView

@@ -46,12 +46,12 @@ public class ServerAPI {
         return singleton;
     }
 
-    public static void stopAllAsync(){
-        if(singleton==null){
+    public static void stopAllAsync() {
+        if (singleton == null) {
             return;
         }
         Iterator<AsyncTask> it = asyncList.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             it.next().cancel(true);
         }
     }
@@ -92,7 +92,8 @@ public class ServerAPI {
     private String getURLCredentials() {
         return fullUrl("connect");
     }
-    private String getURLRegister(){
+
+    private String getURLRegister() {
         return fullUrl("register");
     }
 
@@ -113,28 +114,20 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         return fullUrl("messages");
     }
 
-    private String getSendMessageFileURL(String message, String uuid, String filename) {
-        return fullUrl(message, uuid, filename);
-    }
-
     private String getGetMessageURL() {
         return fullUrl("messages");
     }
 
 
-   public void testCredentials(SyncListener2 context, String user, String password) {
+    public void testCredentials(SyncListener2 context, String user, String password) {
         asyncList.add(new AsyncTestCredentials(context, getURLCredentials(), user, password).execute());
     }
+
     public void register(SyncListener2 context, String user, String password) {
-        asyncList.add(new AsyncRegister(context, getURLRegister(),user,password).execute());
+        asyncList.add(new AsyncRegister(context, getURLRegister(), user, password).execute());
     }
 
-
-    public void sendMessage(Context context, String message) {
-       sendMessage(context, message, null);
-    }
-
-    public void sendMessage(Context context, String message,ArrayList<String> base64) {
+    public void sendMessage(Context context, String message, ArrayList<String> base64) {
         asyncList.add(new AsyncSendMessage(context, getSendMessageURL(), message, base64).execute());
     }
 
@@ -142,28 +135,27 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         asyncList.add(new AsyncGetMessage(syncListener, getGetMessageURL()).execute());
     }
 
-    public void getImage(ImageView image,String URL,Context context){
+    public void getImage(ImageView image, String URL, Context context) {
         //Picasso.with(context).load(Uri.parse(URL)).into(image_show);
-        asyncList.add(new AsyncLoadImage(image, URL, context).execute());
-        System.out.println("Load: " + URL);
+        asyncList.add(new AsyncLoadImage(image, URL).execute());
     }
 
 
-  /*  public String post(String url, String json) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(JSON, json.toString());
-        String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
-        Request.Builder requestBuilder = new Request.Builder()
-                .url(url)
-                .header("Authorization", credential);
+    /*  public String post(String url, String json) throws IOException {
+          OkHttpClient client = new OkHttpClient();
+          RequestBody body = RequestBody.create(JSON, json.toString());
+          String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
+          Request.Builder requestBuilder = new Request.Builder()
+                  .url(url)
+                  .header("Authorization", credential);
 
-        if (json != null && !json.equals("")) {
-            requestBuilder.post(body);
-        }
+          if (json != null && !json.equals("")) {
+              requestBuilder.post(body);
+          }
 
-        Response response = client.newCall(requestBuilder.build()).execute();
-        return response.body().string();
-    }*/
+          Response response = client.newCall(requestBuilder.build()).execute();
+          return response.body().string();
+      }*/
     public Response post(String url, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json.toString());
@@ -179,6 +171,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         Response response = client.newCall(requestBuilder.build()).execute();
         return response;
     }
+
     public InputStream fetch_stream(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
         String credential = Credentials.basic(MyCredentials.getLogin(), MyCredentials.getPassword());
@@ -188,6 +181,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         Response response = client.newCall(request).execute();
         return response.body().byteStream();
     }
+
     public Response post_register(String url, String login, String password) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
@@ -195,7 +189,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         try {
             json.put("login", login);
             json.put("password", password);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         RequestBody body = RequestBody.create(JSON, json.toString());
@@ -209,6 +203,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         Response response = client.newCall(requestBuilder.build()).execute();
         return response;
     }
+
     public String post_connect(String url, String login, String password) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
@@ -227,13 +222,14 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
     public Response get(String url) throws IOException {
         return post(url, "");
     }
+
     public static ArrayList<Message> uniqUser(ArrayList<Message> messages) {
-        if(messages==null){
+        if (messages == null) {
             return null;
         }
 
         int index;
-        ArrayList L=new ArrayList<MessageSimple>();
+        ArrayList L = new ArrayList<MessageSimple>();
         for (index = 0; index < messages.size(); index++) {
             MessageSimple pseudo = new MessageSimple(messages.get(index).getPseudo());
             if (!L.contains(pseudo)) {
@@ -247,8 +243,8 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
 
 
     public static ArrayList convertMessage(Response response) {
-        String message= null;
-        if(response==null){
+        String message = null;
+        if (response == null) {
             return null;
         }
 
@@ -258,10 +254,10 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
             e.printStackTrace();
         }
         ArrayList<Message> L = new ArrayList<Message>();
-        if(!response.message().equals("OK")){
-           return null;
+        if (!response.message().equals("OK")) {
+            return null;
 
-        }else {
+        } else {
 
             JSONArray list;
             try {
@@ -274,7 +270,9 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
             for (index = 0; index < list.length(); index++) {
                 try {
                     String json_message = list.get(index).toString();
-                    L.add(Message.fabrique(json_message));
+                    Message m=Message.fabrique(json_message);
+                    if(filter(m))
+                    L.add(m);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -282,6 +280,19 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
             }
         }
         return L;
+    }
+
+    private static boolean filter(Message m) {
+        boolean DEBUG = false;
+        ArrayList<String>available=new ArrayList<String>();
+        available.add("test2");
+        available.add("benji");
+        if(DEBUG) {
+            return (m != null && available.contains(m.getPseudo()));
+        }else{
+            return true;
+        }
+
     }
 }
 
