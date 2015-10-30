@@ -107,7 +107,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
             @Override
             public void run() {
                 doRefresh();
-                handler.postDelayed(this, 10 * 1000);
+                handler.postDelayed(this, 5 * 1000);
             }
         };
         handler.postDelayed(runnable, 0);
