@@ -1,4 +1,5 @@
 package com.comeb.tchat;
+
 import com.comeb.model.Message;
 
 import java.util.ArrayList;
@@ -8,5 +9,6 @@ import java.util.ArrayList;
  */
 public interface SyncListener {
     void onSuccess(ArrayList<Message> messages);
+
     void onFailure();
 }

@@ -21,9 +21,9 @@ public class MessageLeft extends Message {
     }
 
     public MessageLeft(String login, String message, String uuid) {
-        super(login,message);
+        super(login, message);
         resImg = R.mipmap.ic_user_blue;
-        this.uuid=uuid;
+        this.uuid = uuid;
     }
 
     public MessageLeft(String login, String message, String uuid, JSONArray images) {

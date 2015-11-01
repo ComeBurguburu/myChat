@@ -26,12 +26,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "messagesManager";
 
-    // Contacts table name
+    // Messages table name
     private static final String TABLE_MESSAGES = "messages";
 
     private static final String KEY_IMG = "img";
 
-    // Contacts Table Columns names
+    // Messages Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_MESSAGE = "message";
@@ -51,11 +51,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGES + "("
+        String CREATE_MESSAGE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME + " TEXT,"
                 + KEY_MESSAGE + " TEXT, " + KEY_IMG + " TEXT" +
                 ")";
-        db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL(CREATE_MESSAGE_TABLE);
     }
 
     /**

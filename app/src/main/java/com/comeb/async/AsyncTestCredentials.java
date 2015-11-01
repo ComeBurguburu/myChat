@@ -35,11 +35,11 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
 
     public AsyncTestCredentials(SyncListener2 sync, String URL, String user, String password) {
         super();
-        this.context=(Context)sync;
-        this.sync=sync;
-        this.URL=URL;
-        this.login=user;
-       this.password=password;
+        this.context = (Context) sync;
+        this.sync = sync;
+        this.URL = URL;
+        this.login = user;
+        this.password = password;
 
     }
 

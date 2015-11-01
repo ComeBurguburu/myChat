@@ -48,13 +48,13 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
 
     }
 
-    public AsyncRegister(SyncListener2 sync, String URL,String login,String password) {
+    public AsyncRegister(SyncListener2 sync, String URL, String login, String password) {
         super();
-        this.context=(Context)sync;
-        this.sync =sync;
-        this.URL=URL;
-        this.login=login;
-        this.password=password;
+        this.context = (Context) sync;
+        this.sync = sync;
+        this.URL = URL;
+        this.login = login;
+        this.password = password;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
     protected Void doInBackground(Void... arg0) {
 
         try {
-            response = ServerAPI.getInstance().post_register(getURL(),login,password);
+            response = ServerAPI.getInstance().post_register(getURL(), login, password);
             answer = response.body().string();
         } catch (IOException e) {
             response = null;
@@ -82,6 +82,7 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
         }
         return null;
     }
+
     @Override
     protected void onPostExecute(Void result) {
 

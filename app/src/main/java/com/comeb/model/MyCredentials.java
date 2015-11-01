@@ -10,21 +10,23 @@ public class MyCredentials {
 
     private static Context context;
 
-    public static void setContext(Context c){
-        context=c;
+    public static void setContext(Context c) {
+        context = c;
     }
+
     public static String getPassword() {
         SharedPreferences prefs = context.getSharedPreferences("users_credentials", context.MODE_PRIVATE);
         return prefs.getString("password", "");
     }
 
     public static void setPassword(String password) {
-        edit(context,"password",password);
+        edit(context, "password", password);
     }
-    private static void edit(Context context,String key,String value){
+
+    private static void edit(Context context, String key, String value) {
         SharedPreferences prefs = context.getSharedPreferences("users_credentials", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key,value);
+        editor.putString(key, value);
         editor.commit();
     }
 
@@ -35,10 +37,11 @@ public class MyCredentials {
 
 
     public static void setLogin(String login) {
-        edit(context,"login",login);
+        edit(context, "login", login);
     }
-    public static boolean isSomeOneLogged(){
-        return !(getLogin().equals("")||getPassword().equals(""));
+
+    public static boolean isSomeOneLogged() {
+        return !(getLogin().equals("") || getPassword().equals(""));
     }
 
 }

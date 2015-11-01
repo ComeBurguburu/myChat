@@ -24,7 +24,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
     private ArrayList<String> base64_list;
     private String answer;
 
-    private ArrayList getBase64() {
+    private ArrayList<String> getBase64() {
         return base64_list;
     }
 
@@ -71,9 +71,9 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
             json.put("message", message);
             json.put("uuid", UUID.randomUUID());
             if (isBase64()) {
-                for (Object base64 : getBase64()) {
+                for (String base64 : getBase64()) {
 
-                    json_image.put("mimeType", "image/png").put("data", (String) base64);
+                    json_image.put("mimeType", "image/png").put("data", base64);
                     attachements.put(json_image);
                 }
 

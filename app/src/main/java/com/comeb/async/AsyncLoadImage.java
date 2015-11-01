@@ -27,8 +27,8 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
 
     public AsyncLoadImage(ImageView v, String URL) {
         super();
-        this.URL=URL;
-        this.image_view=v;
+        this.URL = URL;
+        this.image_view = v;
     }
 
     @Override
@@ -71,7 +71,7 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
 
     }
 
-    public InputStream toInputSteam(String s)  {
+    public InputStream toInputSteam(String s) {
         return new ByteArrayInputStream(s.getBytes());
     }
 

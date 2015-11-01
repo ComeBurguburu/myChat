@@ -15,14 +15,15 @@ public class MessageRight extends Message {
         resImg = R.mipmap.ic_user_red;
     }
 
-    public MessageRight(String p,String m){
-        super(p,m);
+    public MessageRight(String p, String m) {
+        super(p, m);
         resImg = R.mipmap.ic_user_red;
     }
+
     public MessageRight(String login, String message, String uuid) {
-        super(login,message);
+        super(login, message);
         resImg = R.mipmap.ic_user_red;
-        this.uuid=uuid;
+        this.uuid = uuid;
     }
 
     public MessageRight(String login, String message, String uuid, JSONArray images) {
@@ -43,7 +44,7 @@ public class MessageRight extends Message {
     }
 
     @Override
-    public boolean isLeft(){
+    public boolean isLeft() {
         return false;
     }
 }

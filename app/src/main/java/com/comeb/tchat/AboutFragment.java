@@ -21,7 +21,6 @@ public class AboutFragment extends DummyFragment {
     private int color;
     private SimpleRecyclerAdapter adapter;
     private RecyclerView recyclerView;
-    private ArrayList<String> encoded;
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
@@ -47,7 +46,7 @@ public class AboutFragment extends DummyFragment {
 
         final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.dummyfrag_bg);
         frameLayout.setBackgroundColor(color);
-        
+
         recyclerView = (RecyclerView) view.findViewById(R.id.dummyfrag_scrollableview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
@@ -57,15 +56,11 @@ public class AboutFragment extends DummyFragment {
         //  recyclerView.setHasFixedSize(true);
         if (adapter == null) {
 
-            adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(),getContext());
+            adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(), getContext());
         }
         recyclerView.setAdapter(adapter);
 
         return view;
-    }
-
-
-    public void setEncoded(ArrayList<String> encoded) {
     }
 }
 

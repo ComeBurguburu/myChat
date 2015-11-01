@@ -31,6 +31,9 @@
     <string name="title_activity_list">ListActivity</string>
     <string name="no_connexion">no internet connexion</string>
     <string name="connected_as"> connected as %s</string>
-    <string name="credits">Version 1.0</string>
+    <string name="credits">Version 1.0\n\nTchat with your friends \n\n\nCopy Right  \u00A9 BURGUBURU Côme &amp; JORNET Benjamin</string>
     <string name="ok">ok</string>
+    <string name="contacts">CONTACTS</string>
+    <string name="messages">MESSAGES</string>
+    <string name="about">ABOUT</string>
 </resources>

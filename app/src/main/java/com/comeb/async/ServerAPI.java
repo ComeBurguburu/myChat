@@ -270,9 +270,9 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
             for (index = 0; index < list.length(); index++) {
                 try {
                     String json_message = list.get(index).toString();
-                    Message m=Message.fabrique(json_message);
-                    if(filter(m))
-                    L.add(m);
+                    Message m = Message.fabrique(json_message);
+                    if (filter(m))
+                        L.add(m);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -284,12 +284,12 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
 
     private static boolean filter(Message m) {
         boolean DEBUG = false;
-        ArrayList<String>available=new ArrayList<String>();
+        ArrayList<String> available = new ArrayList<String>();
         available.add("test2");
         available.add("benji");
-        if(DEBUG) {
+        if (DEBUG) {
             return (m != null && available.contains(m.getPseudo()));
-        }else{
+        } else {
             return true;
         }
 

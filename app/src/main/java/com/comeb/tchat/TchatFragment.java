@@ -63,8 +63,9 @@ public class TchatFragment extends DummyFragment {
                 String message = ed.getText().toString();
                 if (!message.equals("")) {
                     ed.setText("");
-                    preview.setImageBitmap(null);
                     ServerAPI.getInstance().sendMessage(getContext(), message, encoded);
+                    preview.setImageBitmap(null);
+                    setEncoded(null);
                 }
             }
         });

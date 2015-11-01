@@ -65,8 +65,8 @@ public class DummyFragment extends Fragment {
         return view;
     }
 
-
     public void setEncoded(ArrayList<String> encoded) {
+        this.encoded = encoded;
     }
 }
 

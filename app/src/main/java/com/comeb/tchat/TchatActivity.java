@@ -125,9 +125,9 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         frag[0] = new DummyFragment(ContextCompat.getColor(context, R.color.accent_material_light));
         frag[1] = new TchatFragment(ContextCompat.getColor(context, R.color.ripple_material_light));
         frag[2] = new AboutFragment(ContextCompat.getColor(context, R.color.button_material_dark));
-        adapter.addFrag(frag[0], "CONTACTS");
-        adapter.addFrag(frag[1], "MESSAGES");
-        adapter.addFrag(frag[2], "ABOUT");
+        adapter.addFrag(frag[0], context.getString(R.string.contacts));
+        adapter.addFrag(frag[1], context.getString(R.string.messages));
+        adapter.addFrag(frag[2], context.getString(R.string.about));
         viewPager.setAdapter(adapter);
     }
 
@@ -153,7 +153,6 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     private void logout() {
         MyCredentials.setLogin("");
         MyCredentials.setPassword("");
-
         finish();
     }
 
@@ -213,7 +212,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
                 encoded.add(Base64.encodeToString(byteArray, Base64.DEFAULT));
                 // }
                 //   cursor.close();
-                setEncoded(encoded, 1);
+                setEncoded(encoded);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -223,8 +222,8 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         }
     }
 
-    private void setEncoded(ArrayList<String> encoded, int i) {
-        getFragment(i).setEncoded(encoded);
+    private void setEncoded(ArrayList<String> encoded) {
+        getFragment(1).setEncoded(encoded);
     }
 
     @Override
@@ -232,6 +231,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         super.onDestroy();
         ServerAPI.stopAllAsync();
     }
+
     @Override
     public void onBackPressed() {
     }
