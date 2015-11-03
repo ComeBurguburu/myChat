@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public interface SyncListener {
     void onSuccess(ArrayList<Message> messages);
 
-    void onFailure();
+    void displayError(boolean show,String message);
 }

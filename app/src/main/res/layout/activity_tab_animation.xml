@@ -9,6 +9,7 @@
         android:id="@+id/tabanim_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/tabanim_toolbar"
             android:layout_width="match_parent"
@@ -22,7 +23,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/connexion_error"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:textSize="15sp"/>
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tabanim_viewpager"

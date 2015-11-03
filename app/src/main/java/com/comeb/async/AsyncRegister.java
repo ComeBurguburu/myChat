@@ -62,14 +62,11 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //Toast.makeText(context, ServerAPI.getInstance().getURLtestCredentials(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-        // Mise à jour de la ProgressBar
-        //mProgressBar.setProgress(values[0]);
     }
 
     @Override

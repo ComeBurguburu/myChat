@@ -1,8 +1,10 @@
 package com.comeb.async;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.comeb.model.MyCredentials;
+import com.comeb.tchat.R;
 import com.comeb.tchat.SyncListener;
 import com.squareup.okhttp.Response;
 
@@ -13,7 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
-    protected SyncListener syncListener;
+    private SyncListener syncListener;
+    private Context context;
     private String URL;
     protected Response response;
     private ArrayList messages;
@@ -27,6 +30,8 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
     public AsyncGetMessage(SyncListener syncListener, String URL) {
         super();
         this.isFinish = false;
+        this.context=(Context)syncListener;
+        this.syncListener = syncListener;
         this.URL = URL;
         this.syncListener = syncListener;
     }
@@ -34,14 +39,11 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //Toast.makeText(context, "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
-        // Mise à jour de la ProgressBar
-        //mProgressBar.setProgress(values[0]);
     }
 
     @Override
@@ -68,8 +70,9 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPostExecute(Void result) {
         if (response == null) {
-            syncListener.onFailure();
+            syncListener.displayError(true, context.getString(R.string.no_connexion));
         } else {
+            syncListener.displayError(false, "");
             syncListener.onSuccess(messages);
         }
         this.isFinish = true;

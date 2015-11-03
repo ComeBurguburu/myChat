@@ -17,8 +17,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
 import com.comeb.async.ServerAPI;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 public class TchatActivity extends AppCompatActivity implements SyncListener {
 
     private static DummyFragment[] frag;
+    private Context context = this;
 
     public DummyFragment getFragment(int index) {
 
@@ -51,7 +53,7 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_animation);
-        MyCredentials.setContext(TchatActivity.this);
+        MyCredentials.setContext(context);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
 
@@ -119,7 +121,6 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Context context = TchatActivity.this;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         frag = new DummyFragment[3];
         frag[0] = new DummyFragment(ContextCompat.getColor(context, R.color.accent_material_light));
@@ -154,8 +155,6 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         MyCredentials.setLogin("");
         MyCredentials.setPassword("");
 
-        Context context = TchatActivity.this;
-
         Intent intent = new Intent(context, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
@@ -181,8 +180,16 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     }
 
     @Override
-    public void onFailure() {
-        Toast.makeText(this, getString(R.string.no_connexion), Toast.LENGTH_LONG).show();
+    public void displayError(boolean show, String message) {
+
+        TextView t = (TextView) findViewById(R.id.connexion_error);
+        t.setText(message);
+        if (show) {
+            t.setVisibility(View.VISIBLE);
+        } else {
+            t.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

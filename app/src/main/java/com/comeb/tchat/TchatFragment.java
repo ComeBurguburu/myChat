@@ -63,7 +63,7 @@ public class TchatFragment extends DummyFragment {
                 String message = ed.getText().toString();
                 if (!message.equals("")) {
                     ed.setText("");
-                    ServerAPI.getInstance().sendMessage(getContext(), message, encoded);
+                    ServerAPI.getInstance().sendMessage((SyncListener)getActivity(), message, encoded);
                     preview.setImageBitmap(null);
                     setEncoded(null);
                 }
@@ -89,8 +89,8 @@ public class TchatFragment extends DummyFragment {
             adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(), getContext());
         }
         recyclerView.setAdapter(adapter);
+		
         DatabaseHandler dao = DatabaseHandler.getInstance(getContext());
-
         getAdapter().setList(dao.getAllMessages());
         getAdapter().notifyDataSetChanged();
 

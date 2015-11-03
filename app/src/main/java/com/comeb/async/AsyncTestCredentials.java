@@ -87,7 +87,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
             e.printStackTrace();
             sync.error(context.getString(R.string.connexion_error), true, true);
         }
-
+        this.isFinish = true;
     }
 
     public boolean isFinish() {

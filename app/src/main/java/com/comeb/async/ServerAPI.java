@@ -155,7 +155,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         }
     }
 
-    public void sendMessage(Context context, String message, ArrayList<String> base64) {
+    public void sendMessage(SyncListener context, String message, ArrayList<String> base64) {
         if (async_send != null && async_send.isFinish()) {
             async_send.cancel(true);
             async_send = null;

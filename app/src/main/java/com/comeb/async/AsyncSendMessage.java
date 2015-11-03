@@ -2,10 +2,10 @@ package com.comeb.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.comeb.model.MyCredentials;
 import com.comeb.tchat.R;
+import com.comeb.tchat.SyncListener;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
+
     private Context context;
+    private SyncListener sync;
     private String URL;
     private Response response;
     private String message;
@@ -41,10 +43,11 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
         return URL;
     }
 
-    public AsyncSendMessage(Context context, String URL, String message, ArrayList<String> base64) {
+    public AsyncSendMessage(SyncListener sync, String URL, String message, ArrayList<String> base64) {
         super();
         this.isFinish = false;
-        this.context = context;
+        this.sync = sync;
+        this.context = (Context) sync;
         this.URL = URL;
         this.message = message;
         this.base64_list = base64;
@@ -102,10 +105,12 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPostExecute(Void result) {
         if (response == null) {
-            Toast.makeText(context, context.getString(R.string.no_connexion), Toast.LENGTH_LONG).show();
+            sync.displayError(true, context.getString(R.string.no_connexion));
         }
         if (response != null && response.code() != 200) {
-            Toast.makeText(context, context.getString(R.string.message_too_large), Toast.LENGTH_LONG).show();
+            sync.displayError(true, context.getString(R.string.message_too_large));
+        } else {
+            sync.displayError(false, "");
         }
 
         this.isFinish = true;

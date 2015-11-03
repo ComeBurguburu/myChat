@@ -53,9 +53,8 @@ public class AboutFragment extends DummyFragment {
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        //  recyclerView.setHasFixedSize(true);
-        if (adapter == null) {
 
+        if (adapter == null) {
             adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(), getContext());
         }
         recyclerView.setAdapter(adapter);

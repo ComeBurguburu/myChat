@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.comeb.model.Message;
+import com.comeb.model.MessageSimple;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -120,8 +121,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting All Messages
     public ArrayList<Message> getAllMessages() {
         ArrayList<Message> messageList = new ArrayList<Message>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_MESSAGES;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_MESSAGES, null, null, null, null, null, null, null);
@@ -129,14 +128,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         while (cursor.moveToNext()) {
             Message message = Message.fabrique(cursor.getInt(0), cursor.getString(1), cursor.getString(2), "");
-            // Adding message to list
             messageList.add(message);
         }
 
 
         return messageList;
     }
+    public ArrayList<Message> getAllContacts() {
+        ArrayList<Message> contactList = new ArrayList<Message>();
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_MESSAGES, null, null, null, null, null, null, null);
+
+        // looping through all rows and adding to list
+        while (cursor.moveToNext()) {
+            MessageSimple message = new MessageSimple(cursor.getString(1));
+            contactList.add(message);
+        }
+        return contactList;
+    }
     // Updating single message
     public int updateMessage(Message message) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -165,8 +175,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
-
-        // return count
         return cursor.getCount();
     }
 

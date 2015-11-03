@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.comeb.adapter.SimpleRecyclerAdapter;
+import com.comeb.database.DatabaseHandler;
 import com.comeb.model.Message;
 
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class DummyFragment extends Fragment {
             adapter = new SimpleRecyclerAdapter(new ArrayList<Message>(),getContext());
         }
         recyclerView.setAdapter(adapter);
+
+        DatabaseHandler dao = DatabaseHandler.getInstance(getContext());
+        getAdapter().setList(dao.getAllContacts());
+        getAdapter().notifyDataSetChanged();
 
         return view;
     }
