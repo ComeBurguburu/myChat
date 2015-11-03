@@ -153,6 +153,12 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
     private void logout() {
         MyCredentials.setLogin("");
         MyCredentials.setPassword("");
+
+        Context context = TchatActivity.this;
+
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
         finish();
     }
 
@@ -231,9 +237,4 @@ public class TchatActivity extends AppCompatActivity implements SyncListener {
         super.onDestroy();
         ServerAPI.stopAllAsync();
     }
-
-    @Override
-    public void onBackPressed() {
-    }
-
 }

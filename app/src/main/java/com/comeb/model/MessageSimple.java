@@ -7,4 +7,8 @@ public class MessageSimple extends MessageRight {
     public MessageSimple(String pseudo) {
         super(pseudo, "");
     }
+
+    public String getInfo() {
+        return "login: " + getPseudo();
+    }
 }

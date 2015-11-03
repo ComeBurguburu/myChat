@@ -20,6 +20,7 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
     protected String response;
     private Bitmap bmp;
     private ImageView image_view;
+    private boolean isFinish;
 
     public String getURL() {
         return URL;
@@ -27,6 +28,7 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
 
     public AsyncLoadImage(ImageView v, String URL) {
         super();
+        this.isFinish = false;
         this.URL = URL;
         this.image_view = v;
     }
@@ -66,9 +68,12 @@ class AsyncLoadImage extends AsyncTask<Void, Integer, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-
         image_view.setImageBitmap(bmp);
+        this.isFinish = true;
+    }
 
+    public boolean isFinish() {
+        return isFinish;
     }
 
     public InputStream toInputSteam(String s) {

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 
 public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
+    private boolean isFinish;
     private SyncListener2 sync;
     private Context context;
     private String URL;
@@ -40,6 +41,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
         this.URL = URL;
         this.login = user;
         this.password = password;
+        this.isFinish = false;
 
     }
 
@@ -86,6 +88,10 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
             sync.error(context.getString(R.string.connexion_error), true, true);
         }
 
+    }
+
+    public boolean isFinish() {
+        return isFinish;
     }
 
 

@@ -22,6 +22,7 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
     private String URL;
     private Response response;
     private String answer;
+    private boolean isFinish;
 
 
     public String getLogin() {
@@ -55,6 +56,7 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
         this.URL = URL;
         this.login = login;
         this.password = password;
+        this.isFinish = false;
     }
 
     @Override
@@ -103,6 +105,10 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
             e.printStackTrace();
             sync.onFailure(context.getString(R.string.no_connexion));
         }
+        this.isFinish = true;
+    }
 
+    public boolean isFinish() {
+        return isFinish;
     }
 }

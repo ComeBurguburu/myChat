@@ -1,7 +1,6 @@
 package com.comeb.async;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.comeb.model.Message;
@@ -23,7 +22,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by côme on 07/10/2015.
@@ -33,7 +31,11 @@ public class ServerAPI {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static ServerAPI singleton = null;
-    private static ArrayList<AsyncTask> asyncList;
+    private static AsyncTestCredentials async_test;
+    private static AsyncRegister async_register;
+    private static AsyncSendMessage async_send;
+    private static AsyncGetMessage async_get_message;
+    private static AsyncLoadImage async_load_image;
 
     private ServerAPI() {
     }
@@ -41,7 +43,6 @@ public class ServerAPI {
     public static ServerAPI getInstance() {
         if (singleton == null) {
             singleton = new ServerAPI();
-            singleton.asyncList = new ArrayList<AsyncTask>();
         }
         return singleton;
     }
@@ -50,9 +51,25 @@ public class ServerAPI {
         if (singleton == null) {
             return;
         }
-        Iterator<AsyncTask> it = asyncList.iterator();
-        while (it.hasNext()) {
-            it.next().cancel(true);
+        if (async_test != null) {
+            async_test.cancel(true);
+            async_test = null;
+        }
+        if (async_register != null) {
+            async_register.cancel(true);
+            async_register = null;
+        }
+        if (async_get_message != null) {
+            async_get_message.cancel(true);
+            async_get_message = null;
+        }
+        if (async_send != null) {
+            async_send.cancel(true);
+            async_send = null;
+        }
+        if (async_load_image != null) {
+            async_load_image.cancel(true);
+            async_load_image = null;
         }
     }
 
@@ -60,9 +77,6 @@ public class ServerAPI {
         return fullUrl(route, "", "");
     }
 
-    private String fullUrl(String str1, String str2) {
-        return fullUrl(str1, str2, "");
-    }
 
     private String fullUrl(String str1, String str2, String str3) {
         StringBuffer sb = new StringBuffer();
@@ -120,24 +134,59 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
 
 
     public void testCredentials(SyncListener2 context, String user, String password) {
-        asyncList.add(new AsyncTestCredentials(context, getURLCredentials(), user, password).execute());
+        if (async_test != null && async_test.isFinish()) {
+            async_test.cancel(true);
+            async_test = null;
+        }
+        if (async_test == null) {
+            async_test = new AsyncTestCredentials(context, getURLCredentials(), user, password);
+            async_test.execute();
+        }
     }
 
     public void register(SyncListener2 context, String user, String password) {
-        asyncList.add(new AsyncRegister(context, getURLRegister(), user, password).execute());
+        if (async_register != null && async_register.isFinish()) {
+            async_register.cancel(true);
+            async_register = null;
+        }
+        if (async_register == null) {
+            async_register = new AsyncRegister(context, getURLRegister(), user, password);
+            async_register.execute();
+        }
     }
 
     public void sendMessage(Context context, String message, ArrayList<String> base64) {
-        asyncList.add(new AsyncSendMessage(context, getSendMessageURL(), message, base64).execute());
+        if (async_send != null && async_send.isFinish()) {
+            async_send.cancel(true);
+            async_send = null;
+        }
+        if (async_send == null) {
+            async_send = new AsyncSendMessage(context, getSendMessageURL(), message, base64);
+            async_send.execute();
+        }
     }
 
     public void getAllMessage(SyncListener syncListener) {
-        asyncList.add(new AsyncGetMessage(syncListener, getGetMessageURL()).execute());
+        if (async_get_message != null && async_get_message.isFinish()) {
+            async_get_message.cancel(true);
+            async_get_message = null;
+        }
+        if (async_get_message == null) {
+            async_get_message = new AsyncGetMessage(syncListener, getGetMessageURL());
+            async_get_message.execute();
+        }
     }
 
     public void getImage(ImageView image, String URL, Context context) {
         //Picasso.with(context).load(Uri.parse(URL)).into(image_show);
-        asyncList.add(new AsyncLoadImage(image, URL).execute());
+        if (async_load_image != null && async_load_image.isFinish()) {
+            async_load_image.cancel(true);
+            async_load_image = null;
+        }
+        if (async_load_image == null) {
+            async_load_image = new AsyncLoadImage(image, URL);
+            async_load_image.execute();
+        }
     }
 
 
@@ -284,9 +333,12 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
 
     private static boolean filter(Message m) {
         boolean DEBUG = false;
+
         ArrayList<String> available = new ArrayList<String>();
         available.add("test2");
         available.add("benji");
+        available.add("côme");
+
         if (DEBUG) {
             return (m != null && available.contains(m.getPseudo()));
         } else {

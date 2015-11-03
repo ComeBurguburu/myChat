@@ -77,10 +77,6 @@ public abstract class Message {
         return resImg;
     }
 
-    public void setResImg(int resImg) {
-        this.resImg = resImg;
-    }
-
     public String getPseudo() {
         return pseudo;
     }

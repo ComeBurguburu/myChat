@@ -17,5 +17,4 @@ Points faibles de l'application :
 	-  meilleur design global de l'application possible
 	- il n'est possible d'envoyer et de recevoir qu'une seul image par message
         - clignotement de l'écran due au rafraichissement des images
-	- touche retour désactiver pour éviter un retour accidentel au login
 	- random connexion timeout

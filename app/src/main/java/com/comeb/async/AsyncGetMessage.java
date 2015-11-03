@@ -17,6 +17,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
     private String URL;
     protected Response response;
     private ArrayList messages;
+    private boolean isFinish;
 
     public String getURL() {
         return URL;
@@ -25,6 +26,7 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
 
     public AsyncGetMessage(SyncListener syncListener, String URL) {
         super();
+        this.isFinish = false;
         this.URL = URL;
         this.syncListener = syncListener;
     }
@@ -70,6 +72,11 @@ class AsyncGetMessage extends AsyncTask<Void, Integer, Void> {
         } else {
             syncListener.onSuccess(messages);
         }
+        this.isFinish = true;
+    }
+
+    public boolean isFinish() {
+        return isFinish;
     }
 
    /* private ArrayList convertMessage_GSon(String response)  {

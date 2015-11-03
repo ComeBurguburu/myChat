@@ -83,7 +83,9 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2 {
         MyCredentials.setPassword(password);
 
         Intent intent = new Intent(context, TchatActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
+        finish();
     }
 
     public void error(String message, boolean userWrong, boolean passwordWrong) {

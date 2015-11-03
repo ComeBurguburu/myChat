@@ -23,6 +23,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
     private String message;
     private ArrayList<String> base64_list;
     private String answer;
+    private boolean isFinish;
 
     private ArrayList<String> getBase64() {
         return base64_list;
@@ -42,6 +43,7 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
 
     public AsyncSendMessage(Context context, String URL, String message, ArrayList<String> base64) {
         super();
+        this.isFinish = false;
         this.context = context;
         this.URL = URL;
         this.message = message;
@@ -99,9 +101,18 @@ class AsyncSendMessage extends AsyncTask<Void, Integer, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
-        if (response == null || response.code() != 200) {
+        if (response == null) {
             Toast.makeText(context, context.getString(R.string.no_connexion), Toast.LENGTH_LONG).show();
         }
+        if (response != null && response.code() != 200) {
+            Toast.makeText(context, context.getString(R.string.message_too_large), Toast.LENGTH_LONG).show();
+        }
+
+        this.isFinish = true;
+    }
+
+    public boolean isFinish() {
+        return isFinish;
     }
 
 
