@@ -87,13 +87,14 @@ public class AsyncRegister extends AsyncTask<Void, Integer, Void> {
 
         if (response == null) {
             sync.error(context.getString(R.string.no_connexion), true, true);
+            this.isFinish = true;
             return;
         }
 
         try {
             JSONObject resp = new JSONObject(answer);
             if (resp.getInt("status") == 200) {
-                sync.switchToTchat(context, getLogin(), getPassword());
+                sync.onSuccess(getLogin(), getPassword());
             } else {
                 String message = resp.getString("message");
                 sync.onFailure(message);

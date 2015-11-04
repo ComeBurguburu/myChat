@@ -1,7 +1,5 @@
 package com.comeb.tchat;
 
-import android.content.Context;
-
 /**
  * Created by benjaminjornet on 26/10/15.
  */
@@ -10,5 +8,5 @@ public interface SyncListener2 {
 
     public void error(String message, boolean userWrong, boolean passwordWrong);
 
-    public void switchToTchat(Context context, String login, String password);
+    public void onSuccess(String login, String password);
 }

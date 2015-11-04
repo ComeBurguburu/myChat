@@ -1,8 +1,6 @@
 package com.comeb.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -91,24 +89,6 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
             thumb_image_left = (ImageView) itemView.findViewById(R.id.image_left);
             thumb_image_right = (ImageView) itemView.findViewById(R.id.image_right);
             thumb_image_center = (ImageView) itemView.findViewById(R.id.image_center);
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    // item clicked
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                    alertDialogBuilder.setMessage(currentItem.getInfo());
-                    alertDialogBuilder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    alertDialogBuilder.show();
-                }
-            });
         }
 
         private void setMessage(String message) {

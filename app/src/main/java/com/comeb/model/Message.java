@@ -146,8 +146,4 @@ public abstract class Message {
         return img != null;
     }
 
-    public String getInfo() {
-        return "login: " + getPseudo() + "\nmessage: " + getMessage() + "\nUUID:" + getUuid() + "\nimg: " + hasImg();
-    }
-
 }

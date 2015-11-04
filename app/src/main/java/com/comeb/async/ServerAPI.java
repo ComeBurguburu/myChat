@@ -320,8 +320,7 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
                 try {
                     String json_message = list.get(index).toString();
                     Message m = Message.fabrique(json_message);
-                    if (filter(m))
-                        L.add(m);
+                    L.add(m);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -331,20 +330,5 @@ auteur1:message1;auteur2:message2; … auteurN:messageN
         return L;
     }
 
-    private static boolean filter(Message m) {
-        boolean DEBUG = false;
-
-        ArrayList<String> available = new ArrayList<String>();
-        available.add("test2");
-        available.add("benji");
-        available.add("côme");
-
-        if (DEBUG) {
-            return (m != null && available.contains(m.getPseudo()));
-        } else {
-            return true;
-        }
-
-    }
 }
 

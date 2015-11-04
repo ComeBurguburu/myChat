@@ -138,7 +138,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<Message> contactList = new ArrayList<Message>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_MESSAGES, null, null, null, null, null, null, null);
+        Cursor cursor = db.query(true,TABLE_MESSAGES, null, null, null , KEY_NAME, null, null, null);
 
         // looping through all rows and adding to list
         while (cursor.moveToNext()) {

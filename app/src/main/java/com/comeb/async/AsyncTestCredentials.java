@@ -72,13 +72,14 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
     protected void onPostExecute(Void result) {
         if (response == null) {
             sync.error(context.getString(R.string.no_connexion), true, true);
+            this.isFinish = true;
             return;
         }
 
         try {
             JSONObject resp = new JSONObject(response);
             if (resp.getInt("status") == 200) {
-                sync.switchToTchat(context, getLogin(), getPassword());
+                sync.onSuccess(getLogin(), getPassword());
             } else {
                 JSONArray arr = resp.getJSONArray("elements");
                 sync.error(context.getString(R.string.is_incorrect, arr.get(0)), arr.get(0).equals("login"), arr.get(0).equals("password"));

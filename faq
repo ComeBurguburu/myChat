@@ -1,4 +1,0 @@
-git add .
-git add -u //valide changements
-git commit -m "blabla"
-git push origin master

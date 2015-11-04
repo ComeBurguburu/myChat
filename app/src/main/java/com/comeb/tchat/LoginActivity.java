@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,12 +28,6 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2 {
 
         MyCredentials.setContext(this);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.tabanim_toolbar);
-
-        setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         String username = MyCredentials.getLogin();
         String password = MyCredentials.getPassword();
 
@@ -56,7 +49,9 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2 {
             public void onClick(View view) {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
-                ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
+                if (!usernameToCheck.equals("") && !passwordToCheck.equals("")) {
+                    ServerAPI.getInstance().testCredentials(LoginActivity.this, usernameToCheck, passwordToCheck);
+                }
             }
         });
 
@@ -67,7 +62,9 @@ public class LoginActivity extends AppCompatActivity implements SyncListener2 {
             public void onClick(View view) {
                 String usernameToCheck = usernameEntered.getText().toString();
                 String passwordToCheck = passwordEntered.getText().toString();
-                registerUser(LoginActivity.this, usernameToCheck, passwordToCheck);
+                if (!usernameToCheck.equals("") && !passwordToCheck.equals("")) {
+                    registerUser(LoginActivity.this, usernameToCheck, passwordToCheck);
+                }
             }
         });
 
