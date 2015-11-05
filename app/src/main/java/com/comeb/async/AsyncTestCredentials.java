@@ -82,7 +82,7 @@ public class AsyncTestCredentials extends AsyncTask<Void, Integer, Void> {
                 sync.onSuccess(getLogin(), getPassword());
             } else {
                 JSONArray arr = resp.getJSONArray("elements");
-                sync.error(context.getString(R.string.is_incorrect, arr.get(0)), arr.get(0).equals("login"), arr.get(0).equals("password"));
+                sync.error(context.getString(R.string.is_incorrect, arr.get(0)), arr.get(0).equals("login"), arr.get(0).equals("login") || arr.get(0).equals("password"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
